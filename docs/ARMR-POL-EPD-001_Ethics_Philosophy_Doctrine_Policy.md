@@ -5,7 +5,7 @@
 
 **Document Title:** Ethics, Philosophy, and Doctrine Policy  
 **Document ID:** ARMR-POL-EPD-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Effective Date:** 2026-08-04  
 **Classification:** Core / Governance  
 **Owner:** Area 44 / Inselligence  
@@ -68,7 +68,7 @@ All design, operation, and automation under ARMR ALEYE shall conform to the foll
 |----|--------|------------------|
 | **E1** | Protection | Do not expose what is charged to protect — whether people or systems. |
 | **E2** | Verification | No access shall be granted without explicit, ongoing verification. |
-| **E3** | Doctrine Fidelity | Identity is incomplete without alignment to the Doctrine Sequence. |
+| **E3** | Doctrine Fidelity | Identity is incomplete without alignment to Doctrine Number One and the Doctrine Sequence. |
 | **E4** | Least Privilege | Access and capability shall be limited to what is required for the stated purpose. |
 | **E5** | Auditability | Significant decisions shall leave a recoverable audit trail. |
 | **E6** | Non-Capture of the Core | Area 44 / Inselligence shall not be sold, diluted, or subjected to silent takeover. |
@@ -77,27 +77,39 @@ All design, operation, and automation under ARMR ALEYE shall conform to the foll
 
 ### 4.2 Interpretation
 
-Where ambiguity exists, the interpretation that better protects both people and systems, and that preserves fidelity to the Doctrine Sequence, shall prevail.
+Where ambiguity exists, the interpretation that better protects both people and systems, and that preserves fidelity to Doctrine Number One and the Doctrine Sequence, shall prevail.
 
 ---
 
 ## 5. Doctrine Policy
 
-### 5.1 Doctrine Sequence — The Architecture
+### 5.1 Doctrine Number One
 
-The Doctrine Sequence is ordered. **The sequence is the architecture.**  
+**Doctrine Number One is: Seek God within.**
+
+This is the root doctrine of ARMR ALEYE.  
+All further doctrine, identity, access, and architecture proceed from this center.
+
+> **Doctrine Number One**  
+> Seek God within.
+
+Identity begins inward. The NFC Ring, Area 44, and all verification systems exist to support fidelity to this root — not to replace it.
+
+### 5.2 Doctrine Sequence — The Architecture
+
+From Doctrine Number One follows an ordered sequence. **The sequence is the architecture.**  
 Each step presupposes and requires the prior step.
 
 | Order | Doctrine | Definition |
 |-------|----------|------------|
-| **1** | Seek God within | Source and center. Identity begins inward. |
+| **1** | **Seek God within** | **Doctrine Number One.** Source and center. Identity begins inward. |
 | **2** | Unconditional love | Orientation of action. Non-extractive care for people and systems. |
 | **3** | Understanding | Perception before force. Context, intelligence, and verification. |
 | **4** | Harmonic balance | Integration without domination. Proportion, Trinity integrity, Zero Trust. |
 | **5** | Higher frequency / resonance | Coherence at scale. Aligned access, agents, products, and conduct. |
 
 ```
-1. Seek God within
+1. Seek God within          ← Doctrine Number One (root)
         ↓
 2. Unconditional love
         ↓
@@ -108,25 +120,11 @@ Each step presupposes and requires the prior step.
 5. Higher frequency / resonance
 ```
 
-### 5.2 Doctrine Number One
-
-**Doctrine Number One** is the formal doctrinal statement of ARMR ALEYE:
-
-> Seek God within.  
-> From that center, act with unconditional love.  
-> Meet every system and person with understanding.  
-> Hold harmonic balance in all integration of power.  
-> Rise toward higher frequency and resonance.  
->  
-> This sequence is the architecture.  
-> Identity, access, and authority in ARMR ALEYE are measured by fidelity to it.  
-> People and systems are protected equally under this doctrine.
-
 ### 5.3 Binding Effect
 
-- Identity systems (including the NFC Ring) may monitor alignment with this Doctrine.  
+- Identity systems (including the NFC Ring) may monitor alignment with Doctrine Number One and the Doctrine Sequence.  
 - Access, privilege, and portal stage progression may be conditioned on fidelity to this Doctrine, consistent with Zero Trust and least privilege.  
-- No product, partner agreement, or automation may systematically require violation of Doctrine Number One or Ethics pillars E1–E8.
+- No product, partner agreement, or automation may systematically require violation of Doctrine Number One, the Doctrine Sequence, or Ethics pillars E1–E8.
 
 ---
 
@@ -182,7 +180,8 @@ Enforcement shall itself remain consistent with Understanding, Harmonic balance,
 
 | Version | Effective Date | Description |
 |---------|----------------|-------------|
-| 1.0 | 2026-08-04 | Initial formal policy: Ethics, Philosophy, and Doctrine Sequence; Doctrine Number One adopted |
+| 1.0 | 2026-08-04 | Initial formal policy: Ethics, Philosophy, and Doctrine Sequence |
+| 1.1 | 2026-08-04 | Clarification: Doctrine Number One is “Seek God within”; Sequence remains the architecture |
 
 **Related documents:**  
 - ARMR ALEYE Master Source of Truth (MSOT)  
@@ -191,6 +190,6 @@ Enforcement shall itself remain consistent with Understanding, Harmonic balance,
 
 ---
 
-**End of Policy — ARMR-POL-EPD-001 v1.0**
+**End of Policy — ARMR-POL-EPD-001 v1.1**
 
 *ARMR ALEYE LLC — Values-aligned intelligent system*
