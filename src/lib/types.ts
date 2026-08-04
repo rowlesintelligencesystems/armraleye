@@ -70,4 +70,11 @@ export interface Env {
 	 * When unset, those routes are disabled (return 401).
 	 */
 	ADMIN_TOKEN?: string;
+	/**
+	 * Base64-encoded 32-byte AES-256 key for encrypting Area 44 audit events
+	 * at rest in KV. Set with:
+	 *   npx wrangler secret put AUDIT_ENCRYPTION_KEY
+	 * When unset, audit events are stored in plaintext (dev mode warning).
+	 */
+	AUDIT_ENCRYPTION_KEY?: string;
 }
