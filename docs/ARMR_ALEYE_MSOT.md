@@ -1,11 +1,11 @@
 # ARMR ALEYE — Master Source of Truth (MSOT)
 
 **Document Type:** Master Source of Truth + Running File  
-**Version:** 2.4  
+**Version:** 2.5  
 **Last Updated:** 2026-08-04  
 **Location:** 01_Core_System  
 **Status:** Active Living Document  
-**Companion:** Master Checklist & Audit List · ARMR-POL-EPD-001
+**Companion:** Master Checklist & Audit List · ARMR-POL-EPD-001 v1.4
 
 ---
 
@@ -13,7 +13,7 @@
 
 Single Master Source of Truth for ARMR ALEYE.
 
-**Authoritative ethics, philosophy, and doctrine policy:** **ARMR-POL-EPD-001** (v1.3).  
+**Authoritative ethics, philosophy, and doctrine policy:** **ARMR-POL-EPD-001** (v1.4).  
 Where this MSOT summarizes those topics, **ARMR-POL-EPD-001 controls**.
 
 ---
@@ -25,32 +25,34 @@ ARMR ALEYE · Intelligent System Integration · Hamsa · www.armraleye.com
 
 ---
 
-## 3. Ethics + Philosophy + Doctrine
+## 3. Ethics + Philosophy + Doctrine — LOCKED
 
-**Governing policy:** ARMR-POL-EPD-001 v1.3 (Area 44 / Inselligence)
+**Governing policy:** ARMR-POL-EPD-001 v1.4
 
 ### Doctrine Number One
 
 **Seek God within.**
 
-**It never changes.**  
-No amendment, product decision, commercial agreement, technical control, or exception may alter, replace, dilute, or redefine Doctrine Number One.
-
-### Doctrine Sequence (the architecture)
+### Doctrine Sequence (architecture)
 
 ```
-1. Seek God within          ← Doctrine Number One (immutable)
-        ↓
+1. Seek God within
 2. Unconditional love
-        ↓
 3. Understanding
-        ↓
 4. Harmonic balance
-        ↓
 5. Higher frequency / resonance
 ```
 
-Steps 2–5 and ethics pillars may be refined; the root does not.
+### Immutability
+
+**LOCKED core** (zero refinement without explicit authorization of the founding principal / designated human authority):
+
+1. Doctrine Number One  
+2. Full Doctrine Sequence  
+3. Philosophy (values-aligned intelligent system; equal protection of people and systems; Hamsa)  
+4. Ethics pillars E1–E8  
+
+Operational implementation may evolve to *express* these locks; it may **not** redefine them.
 
 ---
 
@@ -63,17 +65,16 @@ Inselligence owns ARMR-POL-EPD-001.
 
 ## 5. Platforms (built)
 
-Zero Trust · Area 44 APIs · Audit (encrypted) · Command Center  
-Native CRM · Client Portal · Webhooks (Zapier path) · Agent Visibility
+Zero Trust · Area 44 · Audit (encrypted) · Command Center  
+Native CRM · Client Portal · Webhooks · Agent Visibility
 
 ---
 
 ## 6. Running Log (excerpt)
 
-- Ethics + Doctrine Sequence; ARMR-POL-EPD-001 issued  
-- Doctrine Number One clarified as Seek God within  
-- Practical application examples (policy v1.2)  
-- **Doctrine Number One declared immutable — never changes** (policy v1.3; MSOT v2.4)
+- ARMR-POL-EPD-001 issued; Doctrine Number One = Seek God within  
+- Practical examples; Doctrine Number One immutable  
+- **v1.4 / MSOT v2.5: ALL core values + full Sequence + E1–E8 LOCKED** — zero refinement without explicit authorization
 
 ---
 
@@ -89,11 +90,12 @@ Native CRM · Client Portal · Webhooks (Zapier path) · Agent Visibility
 
 | Version | Date | Notes |
 |---------|------|-------|
-| 2.3 | 2026-08-04 | Doctrine Number One = Seek God within |
 | 2.4 | 2026-08-04 | Doctrine Number One immutable |
+| 2.5 | 2026-08-04 | Full core values + doctrine LOCKED |
 
-**Doctrine Number One: Seek God within. It never changes.**
+**Doctrine Number One: Seek God within.**  
+**Core values + Doctrine Sequence + Ethics E1–E8: LOCKED. Zero refinement without explicit authorization.**
 
 ---
 
-*End of MSOT — Version 2.4*
+*End of MSOT — Version 2.5*
