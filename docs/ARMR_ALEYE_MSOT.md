@@ -1,42 +1,66 @@
 # ARMR ALEYE — Master Source of Truth (MSOT)
 
-**Version:** 2.9  
+**Version:** 3.0  
 **Last Updated:** 2026-08-04  
-**Companions:** ARMR-POL-EPD-001 · ARMR-PROD-SCARA-001 · ARMR-WIZ-001 · **ARMR-WIZ-HF-SCARA-001**
+**Status:** Active Living Document
 
 **Standing rule:** After each major update, record it in the Running Log.
 
 ---
 
-## Brand · Doctrine · Trinity
-ARMR ALEYE · Hamsa · www.armraleye.com  
-**Doctrine Number One:** Seek God within (LOCKED)  
-OS → Area 44 (Inselligence) → JHETTI
+## Brand Core
 
-## Product #1 — S'Cara
-Execution companion. Index: ARMR-PROD-SCARA-001  
-**Hybrid Flow run:** ARMR-WIZ-HF-SCARA-001 (complete)  
-**MVP SKU:** Bundle $77  
-**Listing title:** S'Cara — Turn Frameworks into Action-Ready Digital Products
+ARMR ALEYE · Intelligent System Integration · **Hamsa** · www.armraleye.com  
+Values-aligned intelligent system
 
-## Wizard
-ARMR-WIZ-001 · Hybrid Flow + Installation systems active
+## Doctrine — LOCKED
+
+**Doctrine Number One:** Seek God within.  
+Policy ARMR-POL-EPD-001 v1.4 · Hash verification active
+
+## Trinity
+
+ARMR ALEYE - OS → **AREA 44** (Aleye Control) → JHETTI
+
+## Product #1 — Hand of Hamsa
+
+| Field | Value |
+|-------|--------|
+| **Name** | **Hand of Hamsa** |
+| **Former interim** | Systex Companion™ → S'Cara *(retired public)* |
+| **Role** | Execution companion — frameworks → action-ready tools |
+| **MVP** | Hand of Hamsa Complete — $77 |
+
+### Suite naming
+
+| Role | Name |
+|------|------|
+| Product #1 | **Hand of Hamsa** |
+| Control plane | **Area 44** / Aleye Control |
+| Integration | **Aleye Weave** |
+| Auto-populate | **Aleye Scribe** |
+| Third leg | **JHETTI** |
+
+## Systems
+
+Zero Trust · Area 44 · Audit · Locked Core · CRM · Portal · Suite APIs · Wizard (ARMR-WIZ-001)
 
 ## Running Log (excerpt)
-- S'Cara rebrand + Drive Index  
-- Wizard formalized (ARMR-WIZ-001)  
-- **Hybrid Flow executed on S'Cara** (steps 1–8 complete; MVP package defined)  
-- MSOT → **v2.9**
+
+- Doctrine LOCKED  
+- Trademark research: S'Cara/SCARA, Inselligence, Syntelligence flagged  
+- **Product #1 formal name: Hand of Hamsa**  
+- MSOT → **v3.0**
 
 ## Outstanding
-- [ ] Shopify title + inventory for S'Cara  
-- [ ] Export Checklist/Listing to vault Exports  
-- [ ] Production deploy secrets  
+
+- [ ] Production secrets + deploy  
+- [ ] Shopify Hand of Hamsa Complete + inventory  
 - [ ] JHETTI assets  
+- [ ] Attorney TM check before scale ads  
 
 **Doctrine Number One: Seek God within.**  
-**Product #1: S'Cara.**  
-**Wizard: on duty.**
+**Product #1: Hand of Hamsa.**
 
 ---
-*End of MSOT v2.9*
+*End of MSOT v3.0*
