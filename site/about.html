@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — ARMR ALEYE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --cyan: #4ec8d4; --cyan-bright: #6ee0eb; --panel: rgba(12,16,28,0.92); --text: #eef6f9; --muted: #9bb8c4; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',system-ui,sans-serif; background:#080a12 url('bg.jpg') center/cover fixed; color:var(--text); min-height:100vh; }
+    .overlay { min-height:100vh; background:radial-gradient(ellipse at center,rgba(8,10,18,0.45),rgba(8,10,18,0.88)); padding:2rem 1rem 4rem; }
+    .container { max-width:960px; margin:0 auto; }
+    header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
+    .logo { font-family:'Orbitron',sans-serif; font-weight:600; letter-spacing:0.12em; color:var(--cyan-bright); text-decoration:none; font-size:1.15rem; }
+    nav a { color:var(--muted); text-decoration:none; margin-left:1.5rem; font-size:0.92rem; }
+    nav a:hover, nav a.active { color:var(--cyan-bright); }
+    .card { background:var(--panel); border:1px solid rgba(78,200,212,0.15); border-radius:20px; padding:2.2rem; box-shadow:0 20px 60px rgba(0,0,0,0.4); backdrop-filter:blur(16px); }
+    h1 { font-family:'Orbitron',sans-serif; font-size:1.55rem; letter-spacing:0.08em; margin-bottom:0.8rem; }
+    p { color:var(--muted); line-height:1.65; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+  <div class="overlay"><div class="container">
+    <header>
+      <a href="index.html" class="logo">ARMR ALEYE</a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="solutions.html">Solutions</a>
+        <a href="about.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="drive.html">Drive Sync</a>
+      </nav>
+    </header>
+    <div class="card">
+      <h1>About ARMR ALEYE</h1>
+      <p>ARMR ALEYE exists at the intersection of protective tradition and advanced systems engineering. The Hamsa that anchors our identity has long symbolized defense against unseen threats; we apply the same intent to the intelligent systems that now underwrite critical infrastructure, decision loops, and collaborative knowledge.</p>
+      <p>We design and operate integration fabrics that keep those systems connected, observable, and governed — without sacrificing the speed modern operations demand. Area 44 is the concrete expression of that philosophy: a hardened zone where the most sensitive artifacts and orchestration logic live under explicit policy and continuous audit.</p>
+      <p>Whether you are synchronizing operational folders into Google Drive, bridging edge devices to cloud control planes, or enforcing lineage across model packages, our platform is built to protect and connect.</p>
+    </div>
+  </div></div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drive Sync & Area 44 — ARMR ALEYE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #4ec8d4;
+      --cyan-bright: #6ee0eb;
+      --panel: rgba(12, 16, 28, 0.92);
+      --text: #eef6f9;
+      --muted: #9bb8c4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #080a12 url('bg.jpg') center/cover fixed;
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .overlay {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at center, rgba(8,10,18,0.4), rgba(8,10,18,0.85));
+      padding: 2rem 1rem 4rem;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .logo {
+      font-family: 'Orbitron', sans-serif; font-weight: 600;
+      letter-spacing: 0.12em; color: var(--cyan-bright);
+      text-decoration: none; font-size: 1.15rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    nav a {
+      color: var(--muted); text-decoration: none;
+      margin-left: 1.5rem; font-size: 0.92rem; transition: color 0.2s;
+    }
+    nav a:hover, nav a.active { color: var(--cyan-bright); }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(78,200,212,0.15);
+      border-radius: 20px; padding: 2.2rem; margin-bottom: 1.8rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      backdrop-filter: blur(16px);
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif; font-size: 1.6rem;
+      letter-spacing: 0.08em; margin-bottom: 0.6rem; color: #fff;
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif; font-size: 1.15rem;
+      letter-spacing: 0.06em; color: var(--cyan); margin: 1.5rem 0 0.8rem;
+    }
+    p, li { color: var(--muted); line-height: 1.6; font-size: 0.98rem; }
+    ul { padding-left: 1.3rem; margin: 0.6rem 0 1rem; }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #2a9aa6, #4ec8d4);
+      color: #041018; font-weight: 600; font-size: 0.75rem;
+      padding: 0.25rem 0.7rem; border-radius: 6px;
+      letter-spacing: 0.04em; margin-bottom: 1rem;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem; margin-top: 1.2rem;
+    }
+    .feature {
+      background: rgba(78,200,212,0.06);
+      border: 1px solid rgba(78,200,212,0.12);
+      border-radius: 12px; padding: 1.2rem;
+    }
+    .feature h3 { color: var(--cyan-bright); font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1.2rem; padding: 0.7rem 1.6rem;
+      background: linear-gradient(145deg, #7aebf5, #2d9aa6);
+      color: #041018; font-weight: 500; border: none;
+      border-radius: 8px; text-decoration: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(78,200,212,0.4); }
+    code {
+      background: rgba(0,0,0,0.35); padding: 0.15rem 0.4rem;
+      border-radius: 4px; font-size: 0.88em; color: #9aedf5;
+    }
+    .status {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-top: 1rem; font-size: 0.9rem; color: #7ddea8;
+    }
+    .dot {
+      width: 8px; height: 8px; background: #4ade80;
+      border-radius: 50%; box-shadow: 0 0 8px #4ade80;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="container">
+      <header>
+        <a href="index.html" class="logo">ARMR ALEYE</a>
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="drive.html" class="active">Drive Sync</a>
+        </nav>
+      </header>
+      <div class="card">
+        <span class="badge">CONNECTED</span>
+        <h1>Google Drive Sync &amp; Folder Integration</h1>
+        <p>
+          ARMR ALEYE provides secure, intelligent folder synchronization between your local systems,
+          Google Drive, and other authorized sources. Protect critical configuration and model assets
+          while keeping teams aligned through continuous, policy-aware sync.
+        </p>
+        <div class="status">
+          <span class="dot"></span>
+          Google Drive connected — project folder ready
+        </div>
+        <div class="feature-grid">
+          <div class="feature">
+            <h3>Local → Drive Sync</h3>
+            <p>Bidirectional or one-way sync of selected folders. Conflict detection and version history preserved.</p>
+          </div>
+          <div class="feature">
+            <h3>Multi-Source Routing</h3>
+            <p>Route assets from local drives, NAS, or CI pipelines into designated Drive folders with tagging.</p>
+          </div>
+          <div class="feature">
+            <h3>Protected Assets</h3>
+            <p>Sensitive system definitions and integration configs can be locked to Area 44 policy zones.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h1>Area 44 Functionality</h1>
+        <p>
+          <strong>Area 44</strong> is the protected operational zone within the ARMR ALEYE backend.
+          It provides isolated, high-assurance handling for intelligent system integration artifacts,
+          policy enforcement, and secure hand-off between modern control planes and legacy or edge systems.
+        </p>
+        <h2>Core Capabilities</h2>
+        <ul>
+          <li><strong>Isolated execution context</strong> — sensitive orchestration and model packages run inside Area 44 boundaries.</li>
+          <li><strong>Policy-gated sync</strong> — only approved folders and file types may enter or leave the zone.</li>
+          <li><strong>Audit &amp; lineage</strong> — every transfer is recorded with cryptographic checksums and actor identity.</li>
+          <li><strong>Integration adapters</strong> — native connectors for Google Drive, local filesystem watchers, and external object stores.</li>
+        </ul>
+        <h2>Backend Integration Points</h2>
+        <p>When extending the platform, expose Area 44 through:</p>
+        <ul>
+          <li><code>/api/area44/sync</code> — initiate or status a protected folder sync job</li>
+          <li><code>/api/area44/policy</code> — retrieve or update zone policies</li>
+          <li><code>/api/area44/artifacts</code> — list and promote artifacts under Area 44 control</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
