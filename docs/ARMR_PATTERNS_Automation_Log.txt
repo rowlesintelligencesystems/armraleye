@@ -1,0 +1,6 @@
+ARMR ALEYE — PATTERNS TRACKING FILE (ARMR-PAT-001)
+For automation. Append-only. See Drive for full 20-pattern seed log.
+
+NEXT_ID: PAT-021
+
+Seeded: PAT-001 Morph · PAT-002 Shopify Publish · PAT-003 Locked Core · PAT-004 Zero Trust · PAT-005 Audit · PAT-006 Webhook · PAT-007 CRM Stage · PAT-008 Portal · PAT-009 Command Center · PAT-010 Unity Cycle · PAT-011 Tri-Engine · PAT-012 Opportunity · PAT-013 Marketing · PAT-014 Multi-Listing · PAT-015 Preflight · PAT-016 Intake · PAT-017 Tool Synter · PAT-018 Ambient UI · PAT-019 Claims Scan · PAT-020 MSOT Log
