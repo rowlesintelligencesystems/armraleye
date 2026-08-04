@@ -1,5 +1,5 @@
 /**
- * Agent Visibility + Area 44 + Command Center + CRM + Portal + Suite + Locked Core + Page Builder + Channels
+ * Agent Visibility + Area 44 + Command Center + CRM + Portal + Suite + Locked Core + Page Builder + Channels + Payments
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -49,6 +49,7 @@ import portalRoutes from "./portal-routes";
 import suiteRoutes from "./suite-routes";
 import builderRoutes from "./builder-routes";
 import channelRoutes from "./channel-routes";
+import paymentRoutes from "./payment-routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -103,12 +104,14 @@ app.use("/api/portal/*", cors());
 app.use("/api/suite/*", cors());
 app.use("/api/builder/*", cors());
 app.use("/api/channels/*", cors());
+app.use("/api/payments/*", cors());
 
 app.route("/api/crm", crmRoutes);
 app.route("/api/portal", portalRoutes);
 app.route("/api/suite", suiteRoutes);
 app.route("/api/builder", builderRoutes);
 app.route("/api/channels", channelRoutes);
+app.route("/api/payments", paymentRoutes);
 
 app.get("/llms.txt", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
