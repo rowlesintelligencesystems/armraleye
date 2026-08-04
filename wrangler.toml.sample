@@ -1,0 +1,9 @@
+name = "armraleye"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[[kv_namespaces]]
+binding = "VISIBILITY_CACHE"
+id = "YOUR_KV_NAMESPACE_ID"
+
+# Secrets: ADMIN_TOKEN INGEST_SECRET STRIPE_WEBHOOK_SECRET EMAIL_API_KEY
