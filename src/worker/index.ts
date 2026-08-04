@@ -1,22 +1,8 @@
 /**
  * Agent Visibility Worker
  *
- * Serves one enriched content store through every agent-discovery surface:
- *
- *   GET /llms.txt                          — llms.txt index (Markdown)
- *   GET /llms-full.txt                     — full content inlined (Markdown)
- *   GET /index.json                        — typed JSON index
- *   GET /:slug.md                          — per-page Markdown (groundable)
- *   GET /:slug.jsonld                      — per-page schema.org JSON-LD
- *   GET /jsonld                            — site-level schema.org JSON-LD
- *   GET /robots.txt                        — explicit AI-bot directives
- *
- * Plus a small JSON API the bundled UI uses, an OPTIONAL Web Bot Auth
- * identity surface, and the Area 44 / Inselligence Zero Trust control plane.
- *
- * Every text surface sends a `Content-Signal` header declaring how agents may
- * use the content (see https://contentsignals.org / the Content-Signals
- * proposal). The React SPA at `/` is served from static assets.
+ * Serves one enriched content store through every agent-discovery surface,
+ * plus Area 44 / Inselligence Zero Trust control plane with audit persistence.
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -30,6 +16,16 @@ import {
 	renderWebsiteJsonLd,
 } from "../enrichment/surfaces";
 import {
+	getAuditEvent,
+	listAuditEvents,
+} from "../lib/audit-store";
+import {
+	evaluateArea44Policy,
+	getArea44Status,
+	verifyArea44Identity,
+	type Area44VerifyRequest,
+} from "../lib/area44";
+import {
 	clearCache,
 	getResources,
 	siteConfig,
@@ -41,12 +37,6 @@ import {
 	SAMPLE_AGENT_KEYS,
 	verifyAgentIdentity,
 } from "../lib/web-bot-auth";
-import {
-	evaluateArea44Policy,
-	getArea44Status,
-	verifyArea44Identity,
-	type Area44VerifyRequest,
-} from "../lib/area44";
 import type { ResourceClass } from "../lib/zero-trust";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -178,10 +168,11 @@ app.get("/:file{.+\\.jsonld}", async (c) => {
 
 app.get("/api/site", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
+	const area44 = await getArea44Status(c.env);
 	return c.json({
 		site,
 		webBotAuthEnabled: c.env.ENABLE_WEB_BOT_AUTH === "true",
-		area44: getArea44Status(),
+		area44,
 		surfaces: [
 			{ id: "llms-txt", label: "llms.txt", path: "/llms.txt", kind: "text" },
 			{
@@ -282,16 +273,21 @@ app.post("/api/refresh", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// Area 44 / Inselligence — Zero Trust control plane
+// Area 44 / Inselligence — Zero Trust control plane + audit persistence
 // ---------------------------------------------------------------------------
 
-app.get("/api/area44/status", (c) => {
-	return c.json(getArea44Status());
+app.get("/api/area44/status", async (c) => {
+	return c.json(await getArea44Status(c.env));
 });
 
 app.post("/api/area44/verify", async (c) => {
 	const body = await c.req.json<Area44VerifyRequest>().catch(() => null);
-	const result = verifyArea44Identity(c.req.raw, body, c.env.ADMIN_TOKEN);
+	const result = await verifyArea44Identity(
+		c.req.raw,
+		body,
+		c.env,
+		c.env.ADMIN_TOKEN,
+	);
 	const status = result.verified ? 200 : 401;
 	return c.json(result, status as 200 | 401);
 });
@@ -314,11 +310,12 @@ app.post("/api/area44/policy", async (c) => {
 		);
 	}
 
-	const result = evaluateArea44Policy(
+	const result = await evaluateArea44Policy(
 		c.req.raw,
 		body.resource,
 		body.resourceClass,
 		body.action,
+		c.env,
 		c.env.ADMIN_TOKEN,
 	);
 
@@ -332,20 +329,19 @@ app.post("/api/area44/policy", async (c) => {
 	return c.json(result, status as 200 | 401 | 403);
 });
 
-app.get("/api/area44/audit/sample", (c) => {
-	return c.json({
-		note: "Audit events are generated on every policy decision. Persistence layer pending.",
-		sample: {
-			id: "uuid",
-			timestamp: new Date().toISOString(),
-			subjectId: "ring-or-subject-id",
-			resource: "/example",
-			action: "read",
-			decision: "allow",
-			reason: "Identity and policy checks passed",
-			policyId: "zt-default-allow",
-		},
-	});
+/** List recent audit events (most recent first). */
+app.get("/api/area44/audit", async (c) => {
+	const limit = Number(c.req.query("limit") ?? 50);
+	const offset = Number(c.req.query("offset") ?? 0);
+	const result = await listAuditEvents(c.env, { limit, offset });
+	return c.json(result);
+});
+
+/** Get a single audit event by id. */
+app.get("/api/area44/audit/:id", async (c) => {
+	const event = await getAuditEvent(c.env, c.req.param("id"));
+	if (!event) return c.json({ error: "Audit event not found" }, 404);
+	return c.json(event);
 });
 
 // ---------------------------------------------------------------------------
