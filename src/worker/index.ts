@@ -1,5 +1,5 @@
 /**
- * Agent Visibility Worker + Area 44 Zero Trust + Command Center + CRM
+ * Agent Visibility + Area 44 + Command Center + CRM + Client Portal
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -37,6 +37,7 @@ import {
 } from "../lib/web-bot-auth";
 import type { ResourceClass } from "../lib/zero-trust";
 import crmRoutes from "./crm-routes";
+import portalRoutes from "./portal-routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -83,9 +84,10 @@ app.use("/:file{.+\\.jsonld}", cors());
 app.use("/api/area44/*", cors());
 app.use("/api/command-center", cors());
 app.use("/api/crm/*", cors());
+app.use("/api/portal/*", cors());
 
-// Mount native CRM suite
 app.route("/api/crm", crmRoutes);
+app.route("/api/portal", portalRoutes);
 
 // ---------------------------------------------------------------------------
 // Machine-readable surfaces
@@ -167,7 +169,7 @@ app.get("/:file{.+\\.jsonld}", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// JSON API for the bundled UI
+// JSON API
 // ---------------------------------------------------------------------------
 
 app.get("/api/site", async (c) => {
@@ -276,17 +278,12 @@ app.post("/api/refresh", async (c) => {
 	});
 });
 
-// ---------------------------------------------------------------------------
-// Command Center — unified control plane
-// ---------------------------------------------------------------------------
-
 app.get("/api/command-center", async (c) => {
-	const snapshot = await getCommandCenterSnapshot(c.env);
-	return c.json(snapshot);
+	return c.json(await getCommandCenterSnapshot(c.env));
 });
 
 // ---------------------------------------------------------------------------
-// Area 44 / Inselligence — Zero Trust + audit
+// Area 44
 // ---------------------------------------------------------------------------
 
 app.get("/api/area44/status", async (c) => {
@@ -301,8 +298,7 @@ app.post("/api/area44/verify", async (c) => {
 		c.env,
 		c.env.ADMIN_TOKEN,
 	);
-	const status = result.verified ? 200 : 401;
-	return c.json(result, status as 200 | 401);
+	return c.json(result, (result.verified ? 200 : 401) as 200 | 401);
 });
 
 app.post("/api/area44/policy", async (c) => {
@@ -316,9 +312,7 @@ app.post("/api/area44/policy", async (c) => {
 
 	if (!body?.resource || !body?.resourceClass || !body?.action) {
 		return c.json(
-			{
-				error: "Missing required fields: resource, resourceClass, action",
-			},
+			{ error: "Missing required fields: resource, resourceClass, action" },
 			400,
 		);
 	}
@@ -345,8 +339,7 @@ app.post("/api/area44/policy", async (c) => {
 app.get("/api/area44/audit", async (c) => {
 	const limit = Number(c.req.query("limit") ?? 50);
 	const offset = Number(c.req.query("offset") ?? 0);
-	const result = await listAuditEvents(c.env, { limit, offset });
-	return c.json(result);
+	return c.json(await listAuditEvents(c.env, { limit, offset }));
 });
 
 app.get("/api/area44/audit/:id", async (c) => {
@@ -356,7 +349,7 @@ app.get("/api/area44/audit/:id", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// OPTIONAL — Web Bot Auth
+// Web Bot Auth (optional)
 // ---------------------------------------------------------------------------
 
 app.get("/.well-known/web-bot-auth/directory", (c) => {
@@ -368,8 +361,7 @@ app.all("/api/identity", async (c) => {
 	if (c.env.ENABLE_WEB_BOT_AUTH !== "true") {
 		return c.json({ error: "Web Bot Auth is disabled" }, 404);
 	}
-	const result = await verifyAgentIdentity(c.req.raw, SAMPLE_AGENT_KEYS);
-	return c.json(result);
+	return c.json(await verifyAgentIdentity(c.req.raw, SAMPLE_AGENT_KEYS));
 });
 
 export default app;
