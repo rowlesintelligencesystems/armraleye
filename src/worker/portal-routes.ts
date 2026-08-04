@@ -12,6 +12,7 @@ import {
 	upsertPortalWorkflow,
 	type WorkflowStage,
 } from "../lib/client-portal";
+import { dispatchWebhook } from "../lib/webhook-dispatch";
 import type { Env } from "../lib/types";
 
 function isAuthorized(c: {
@@ -27,7 +28,6 @@ function isAuthorized(c: {
 
 const portal = new Hono<{ Bindings: Env }>();
 
-/** Ensure default workflow exists and list workflows. */
 portal.get("/workflows", async (c) => {
 	await ensureDefaultWorkflow(c.env);
 	const workflows = await listPortalWorkflows(c.env);
@@ -44,7 +44,6 @@ portal.post("/workflows", async (c) => {
 	return c.json(workflow, 201);
 });
 
-/** List / create portal accounts. */
 portal.get("/accounts", async (c) => {
 	const limit = Number(c.req.query("limit") ?? 50);
 	const offset = Number(c.req.query("offset") ?? 0);
@@ -69,10 +68,6 @@ portal.post("/accounts", async (c) => {
 	return c.json(account, 201);
 });
 
-/**
- * Advance a portal account through the automated workflow.
- * Body: { stage: WorkflowStage, workflowId?: string }
- */
 portal.post("/accounts/:id/advance", async (c) => {
 	if (!isAuthorized(c)) return c.json({ error: "Unauthorized" }, 401);
 	const body = await c.req
@@ -94,11 +89,39 @@ portal.post("/accounts/:id/advance", async (c) => {
 	}
 });
 
-/** Bootstrap default lead-to-client workflow. */
 portal.post("/workflows/ensure-default", async (c) => {
 	if (!isAuthorized(c)) return c.json({ error: "Unauthorized" }, 401);
 	const workflow = await ensureDefaultWorkflow(c.env);
 	return c.json(workflow);
+});
+
+/**
+ * Manual outbound webhook (budget Zapier path).
+ * Body: { url: string, type?: string, data?: object, secret?: string }
+ * Paste your Zapier Catch Hook URL into `url`.
+ */
+portal.post("/webhook/send", async (c) => {
+	if (!isAuthorized(c)) return c.json({ error: "Unauthorized" }, 401);
+	const body = await c.req
+		.json<{
+			url?: string;
+			type?: string;
+			data?: Record<string, unknown>;
+			secret?: string;
+		}>()
+		.catch(() => null);
+
+	if (!body?.url) return c.json({ error: "url required (https Catch Hook)" }, 400);
+
+	const result = await dispatchWebhook(
+		body.url,
+		body.type ?? "manual.test",
+		body.data ?? { message: "ARMR ALEYE test webhook" },
+		{ source: "manual" },
+		{ secret: body.secret },
+	);
+
+	return c.json(result, result.ok ? 200 : 502);
 });
 
 export default portal;
