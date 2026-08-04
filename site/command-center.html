@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Command Center — ARMR ALEYE</title>
+  <style>
+    :root {
+      --void: #0A0B0F;
+      --panel: #12141A;
+      --glass: rgba(255,255,255,0.04);
+      --gold: #C9A227;
+      --cyan: #3DDCFF;
+      --text: #E8E6E3;
+      --muted: #8B909A;
+      --ok: #3DDC88;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--void);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    nav {
+      width: 220px;
+      background: var(--panel);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 0.75rem 1.25rem;
+      font-weight: 600; letter-spacing: 0.04em;
+      color: var(--gold);
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    nav a:hover, nav a.active {
+      background: var(--glass);
+      color: var(--text);
+    }
+    nav a.active { border-left: 2px solid var(--gold); }
+    main { flex: 1; padding: 1.5rem 2rem; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    header h1 { font-size: 1.35rem; font-weight: 500; }
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .tile {
+      background: var(--glass);
+      border: 1px solid rgba(61, 220, 255, 0.25);
+      border-radius: 12px;
+      padding: 1.1rem;
+      text-align: center;
+    }
+    .tile .icon { font-size: 1.5rem; color: var(--gold); margin-bottom: 0.35rem; }
+    .tile .label { font-size: 0.85rem; color: var(--muted); }
+    .dots { margin-top: 0.5rem; }
+    .dots span {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--ok); margin: 0 2px;
+    }
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 800px) {
+      body { flex-direction: column; }
+      nav { width: 100%; flex-direction: row; flex-wrap: wrap; }
+      .panels { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      min-height: 140px;
+    }
+    .panel h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .panel ul { list-style: none; font-size: 0.9rem; }
+    .panel li { padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .health-bar {
+      height: 8px; border-radius: 4px; background: #1a1d24; overflow: hidden; margin-top: 0.5rem;
+    }
+    .health-bar > i {
+      display: block; height: 100%; width: 72%;
+      background: linear-gradient(90deg, var(--cyan), var(--gold));
+    }
+    #status { font-size: 0.8rem; color: var(--muted); margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="brand">ARMR ALEYE</div>
+    <a class="active" href="command-center.html">Command Center</a>
+    <a href="#crm">CRM</a>
+    <a href="#portal">Client Portal</a>
+    <a href="#sales">Sales</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#area44">Area 44</a>
+  </nav>
+  <main>
+    <header>
+      <h1>Command Center</h1>
+      <span class="badge">Doctrine: Locked</span>
+    </header>
+    <div class="tiles">
+      <div class="tile"><div class="icon">CRM</div><div class="label">CRM</div><div class="dots"><span></span><span></span><span></span></div></div>
+      <div class="tile"><div class="icon">$</div><div class="label">Sales</div><div class="dots"><span></span><span></span><span></span></div></div>
+      <div class="tile"><div class="icon">O</div><div class="label">Portal</div><div class="dots"><span></span><span></span><span></span></div></div>
+      <div class="tile"><div class="icon">44</div><div class="label">Area 44</div><div class="dots"><span></span><span></span><span></span></div></div>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <h2>Activity Feed</h2>
+        <ul id="activity">
+          <li>Priority: Shopify BME publish</li>
+          <li>Suite: sales marketing automation</li>
+          <li>Patterns PAT-001 to PAT-020</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>System Health</h2>
+        <div>Core Operations · Command Center</div>
+        <div class="health-bar"><i></i></div>
+        <p id="status">Loading snapshot…</p>
+      </div>
+    </div>
+  </main>
+  <script>
+    (async function () {
+      var status = document.getElementById('status');
+      try {
+        var r = await fetch('/api/command-center');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var data = await r.json();
+        status.textContent = 'Snapshot ' + (data.generatedAt || '') +
+          ' · admin=' + (data.controls && data.controls.adminTokenConfigured) +
+          ' · auditEnc=' + (data.controls && data.controls.auditEncrypted);
+      } catch (e) {
+        status.textContent = 'Snapshot offline until worker deploy. Shell OK.';
+      }
+    })();
+  </script>
+</body>
+</html>
