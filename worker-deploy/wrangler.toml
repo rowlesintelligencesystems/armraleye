@@ -1,0 +1,11 @@
+name = "armraleye"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+workers_dev = true
+
+# [[kv_namespaces]]
+# binding = "VISIBILITY_CACHE"
+# id = "REPLACE_WITH_KV_ID"
+
+[vars]
+CONTENT_SIGNAL = "ai-input=yes, search=yes, ai-train=no"
