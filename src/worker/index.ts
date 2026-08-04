@@ -1,5 +1,5 @@
 /**
- * Agent Visibility + Area 44 + Command Center + CRM + Client Portal
+ * Agent Visibility + Area 44 + Command Center + CRM + Client Portal + Locked Core
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -23,6 +23,11 @@ import {
 	type Area44VerifyRequest,
 } from "../lib/area44";
 import { getCommandCenterSnapshot } from "../lib/command-center";
+import {
+	LOCKED_CORE_META,
+	LOCKED_CORE_SHA256,
+	verifyLockedCore,
+} from "../lib/locked-core";
 import {
 	clearCache,
 	getResources,
@@ -88,10 +93,6 @@ app.use("/api/portal/*", cors());
 
 app.route("/api/crm", crmRoutes);
 app.route("/api/portal", portalRoutes);
-
-// ---------------------------------------------------------------------------
-// Machine-readable surfaces
-// ---------------------------------------------------------------------------
 
 app.get("/llms.txt", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
@@ -167,10 +168,6 @@ app.get("/:file{.+\\.jsonld}", async (c) => {
 		...contentSignal(c),
 	});
 });
-
-// ---------------------------------------------------------------------------
-// JSON API
-// ---------------------------------------------------------------------------
 
 app.get("/api/site", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
@@ -272,22 +269,30 @@ app.post("/api/refresh", async (c) => {
 		return c.json({ error: "Unauthorized. Set the ADMIN_TOKEN secret." }, 401);
 	}
 	await clearCache(c.env);
-	return c.json({
-		ok: true,
-		message: "Cache cleared; surfaces will re-enrich.",
-	});
+	return c.json({ ok: true, message: "Cache cleared; surfaces will re-enrich." });
 });
 
 app.get("/api/command-center", async (c) => {
-	return c.json(await getCommandCenterSnapshot(c.env));
+	const snapshot = await getCommandCenterSnapshot(c.env);
+	const locked = await verifyLockedCore();
+	return c.json({ ...snapshot, lockedCore: locked });
 });
-
-// ---------------------------------------------------------------------------
-// Area 44
-// ---------------------------------------------------------------------------
 
 app.get("/api/area44/status", async (c) => {
 	return c.json(await getArea44Status(c.env));
+});
+
+/** Cryptographic verification of immutable core values + doctrine */
+app.get("/api/area44/locked-core", async (c) => {
+	const result = await verifyLockedCore();
+	return c.json(
+		{
+			...result,
+			meta: LOCKED_CORE_META,
+			publishedSha256: LOCKED_CORE_SHA256,
+		},
+		result.ok ? 200 : 409,
+	);
 });
 
 app.post("/api/area44/verify", async (c) => {
@@ -347,10 +352,6 @@ app.get("/api/area44/audit/:id", async (c) => {
 	if (!event) return c.json({ error: "Audit event not found" }, 404);
 	return c.json(event);
 });
-
-// ---------------------------------------------------------------------------
-// Web Bot Auth (optional)
-// ---------------------------------------------------------------------------
 
 app.get("/.well-known/web-bot-auth/directory", (c) => {
 	if (c.env.ENABLE_WEB_BOT_AUTH !== "true") return c.notFound();
