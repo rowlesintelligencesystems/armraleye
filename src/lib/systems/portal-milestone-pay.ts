@@ -1,10 +1,9 @@
 export type GateId = "G0"|"G1"|"G2"|"G3"|"G4";
 export type GateStatus = "planned"|"in_progress"|"submitted"|"accepted"|"payment_sent"|"paid"|"waived";
-export interface MilestoneGate { id: GateId; projectId: string; name: string; amountCents: number; currency: string; paymentLinkUrl?: string; status: GateStatus; acceptedAt?: string; paidAt?: string; }
-export function onPortalAccept(gate: MilestoneGate, input: { projectId: string; gateId: GateId; acceptedBy: string }) {
-  if (gate.projectId !== input.projectId || gate.id !== input.gateId) return { gate, nextAction: "invalid" as const };
-  if (gate.status === "paid" || gate.status === "waived") return { gate, nextAction: "already_paid" as const };
-  return { gate: { ...gate, status: "accepted" as const, acceptedAt: new Date().toISOString() }, nextAction: "send_payment_link" as const };
-}
-export function onGatePaid(gate: MilestoneGate): MilestoneGate { return { ...gate, status: "paid", paidAt: new Date().toISOString() }; }
-export function canStartNextGate(previous: MilestoneGate) { return previous.status === "paid" || previous.status === "waived"; }
+export interface MilestoneGate { id: GateId; projectId: string; name: string; amountCents: number; currency: string; paymentLinkUrl?: string; status: GateStatus; acceptedAt?: string; paidAt?: string; evidenceUrls?: string[]; }
+export interface MilestoneProject { id: string; name: string; totalCents: number; currency: string; strategy?: string; gates: MilestoneGate[]; createdAt: string; updatedAt: string; }
+export const DEFAULT_PERCENTAGES: Record<GateId, number> = { G0:0.2,G1:0.2,G2:0.25,G3:0.2,G4:0.15 };
+export function splitContract(totalCents: number) { const ids: GateId[]=["G0","G1","G2","G3","G4"]; const out={} as Record<GateId,number>; let s=0; for(let i=0;i<ids.length;i++){ const id=ids[i]; if(i===4) out[id]=totalCents-s; else { const v=Math.round(totalCents*DEFAULT_PERCENTAGES[id]); out[id]=v; s+=v; } } return out; }
+export function onPortalAccept(gate: MilestoneGate, acceptedBy: string) { if(gate.status==="paid"||gate.status==="waived") return { gate, nextAction:"already_closed" as const }; if(gate.status!=="submitted"&&gate.status!=="in_progress") return { gate, nextAction:"invalid" as const }; return { gate:{...gate,status:"accepted" as const,acceptedAt:new Date().toISOString(),acceptedBy}, nextAction:"send_payment_link" as const }; }
+export function onGatePaid(gate: MilestoneGate): MilestoneGate { return { ...gate, status:"paid", paidAt:new Date().toISOString() }; }
+export function canStartGate(project: MilestoneProject, gateId: GateId) { const order: GateId[]=["G0","G1","G2","G3","G4"]; const idx=order.indexOf(gateId); if(idx<=0) return true; const prev=project.gates.find(g=>g.id===order[idx-1]); return !!prev&&(prev.status==="paid"||prev.status==="waived"); }
