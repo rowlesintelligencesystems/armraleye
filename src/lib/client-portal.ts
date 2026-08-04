@@ -1,12 +1,11 @@
 /**
  * Client Portal + Automated Workflows
  * 17hats-inspired: lead → qualify → proposal → access → active client
- *
- * Portal access is Zero Trust aware (Area 44) and can bind to NFC Ring identity.
  */
 
 import type { AuditStoreEnv } from "./audit-store";
 import { persistAuditEvent } from "./audit-store";
+import { dispatchWebhook } from "./webhook-dispatch";
 import { createAuditEvent } from "./zero-trust";
 
 export type PortalAccessLevel = "view" | "documents" | "billing" | "full";
@@ -240,7 +239,10 @@ export function defaultLeadToClientWorkflow(): Omit<
 			qualified: [
 				{
 					type: "create_document",
-					config: { docType: "questionnaire", title: "Intake Questionnaire" },
+					config: {
+						docType: "questionnaire",
+						title: "Intake Questionnaire",
+					},
 				},
 			],
 			proposal_sent: [
@@ -371,7 +373,37 @@ export async function advancePortalWorkflow(
 				break;
 			}
 			case "webhook": {
-				log.push(`webhook → ${action.config.url ?? "unset"}`);
+				const url = String(action.config.url ?? "");
+				const eventType =
+					String(action.config.eventType ?? `portal.${newStage}`);
+				const result = await dispatchWebhook(
+					url,
+					eventType,
+					{
+						portalAccountId: account.id,
+						contactId: account.contactId,
+						email: account.email,
+						status: account.status,
+						accessLevel: account.accessLevel,
+						workflowStage: newStage,
+						ringId: account.ringId,
+					},
+					{
+						source: "portal",
+						previousStage,
+					},
+					{
+						secret:
+							typeof action.config.secret === "string"
+								? action.config.secret
+								: undefined,
+					},
+				);
+				log.push(
+					result.ok
+						? `webhook → ok ${result.status} evt=${result.eventId}`
+						: `webhook → failed ${result.error}`,
+				);
 				break;
 			}
 			default:
