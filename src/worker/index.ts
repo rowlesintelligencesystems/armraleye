@@ -1,8 +1,5 @@
 /**
- * Agent Visibility Worker
- *
- * Serves one enriched content store through every agent-discovery surface,
- * plus Area 44 / Inselligence Zero Trust control plane with audit persistence.
+ * Agent Visibility Worker + Area 44 Zero Trust + Command Center
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -25,6 +22,7 @@ import {
 	verifyArea44Identity,
 	type Area44VerifyRequest,
 } from "../lib/area44";
+import { getCommandCenterSnapshot } from "../lib/command-center";
 import {
 	clearCache,
 	getResources,
@@ -82,6 +80,7 @@ app.use("/jsonld", cors());
 app.use("/:file{.+\\.md}", cors());
 app.use("/:file{.+\\.jsonld}", cors());
 app.use("/api/area44/*", cors());
+app.use("/api/command-center", cors());
 
 // ---------------------------------------------------------------------------
 // Machine-readable surfaces
@@ -273,6 +272,15 @@ app.post("/api/refresh", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
+// Command Center — unified control plane
+// ---------------------------------------------------------------------------
+
+app.get("/api/command-center", async (c) => {
+	const snapshot = await getCommandCenterSnapshot(c.env);
+	return c.json(snapshot);
+});
+
+// ---------------------------------------------------------------------------
 // Area 44 / Inselligence — Zero Trust control plane + audit persistence
 // ---------------------------------------------------------------------------
 
@@ -329,7 +337,6 @@ app.post("/api/area44/policy", async (c) => {
 	return c.json(result, status as 200 | 401 | 403);
 });
 
-/** List recent audit events (most recent first). */
 app.get("/api/area44/audit", async (c) => {
 	const limit = Number(c.req.query("limit") ?? 50);
 	const offset = Number(c.req.query("offset") ?? 0);
@@ -337,7 +344,6 @@ app.get("/api/area44/audit", async (c) => {
 	return c.json(result);
 });
 
-/** Get a single audit event by id. */
 app.get("/api/area44/audit/:id", async (c) => {
 	const event = await getAuditEvent(c.env, c.req.param("id"));
 	if (!event) return c.json({ error: "Audit event not found" }, 404);
