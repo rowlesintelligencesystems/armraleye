@@ -1,5 +1,5 @@
 /**
- * Agent Visibility + Area 44 + Command Center + CRM + Portal + Suite + Locked Core
+ * Agent Visibility + Area 44 + Command Center + CRM + Portal + Suite + Locked Core + Page Builder
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -47,6 +47,7 @@ import type { ResourceClass } from "../lib/zero-trust";
 import crmRoutes from "./crm-routes";
 import portalRoutes from "./portal-routes";
 import suiteRoutes from "./suite-routes";
+import builderRoutes from "./builder-routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -99,10 +100,12 @@ app.use("/api/command-center", cors());
 app.use("/api/crm/*", cors());
 app.use("/api/portal/*", cors());
 app.use("/api/suite/*", cors());
+app.use("/api/builder/*", cors());
 
 app.route("/api/crm", crmRoutes);
 app.route("/api/portal", portalRoutes);
 app.route("/api/suite", suiteRoutes);
+app.route("/api/builder", builderRoutes);
 
 app.get("/llms.txt", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
