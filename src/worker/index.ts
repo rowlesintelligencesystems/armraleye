@@ -11,8 +11,8 @@
  *   GET /jsonld                            — site-level schema.org JSON-LD
  *   GET /robots.txt                        — explicit AI-bot directives
  *
- * Plus a small JSON API the bundled UI uses, and an OPTIONAL Web Bot Auth
- * identity surface (disabled unless ENABLE_WEB_BOT_AUTH=true).
+ * Plus a small JSON API the bundled UI uses, an OPTIONAL Web Bot Auth
+ * identity surface, and the Area 44 / Inselligence Zero Trust control plane.
  *
  * Every text surface sends a `Content-Signal` header declaring how agents may
  * use the content (see https://contentsignals.org / the Content-Signals
@@ -41,13 +41,18 @@ import {
 	SAMPLE_AGENT_KEYS,
 	verifyAgentIdentity,
 } from "../lib/web-bot-auth";
+import {
+	evaluateArea44Policy,
+	getArea44Status,
+	verifyArea44Identity,
+	type Area44VerifyRequest,
+} from "../lib/area44";
+import type { ResourceClass } from "../lib/zero-trust";
 
 const app = new Hono<{ Bindings: Env }>();
 
 app.onError((err, c) => {
 	console.error(`[Error] ${c.req.method} ${c.req.path}: ${err.message}`);
-	// Match the response type to the surface: text surfaces shouldn't get a
-	// JSON error body.
 	if (/\.(md|txt)$/.test(c.req.path)) {
 		return c.text("Internal server error", 500);
 	}
@@ -58,12 +63,10 @@ function originOf(url: string): string {
 	return new URL(url).origin;
 }
 
-// --- Validation limits for user-supplied content ---------------------------
-const MAX_BODY_BYTES = 100_000; // raw content we'll persist per resource
-const MAX_RESOURCES = 100; // cap total resources to bound KV growth
+const MAX_BODY_BYTES = 100_000;
+const MAX_RESOURCES = 100;
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62})$/;
 
-/** Constant-time-ish bearer check for the mutating routes. */
 function isAuthorized(c: {
 	env: Env;
 	req: { header: (k: string) => string | undefined };
@@ -75,7 +78,6 @@ function isAuthorized(c: {
 	return token.length > 0 && token === configured;
 }
 
-/** Apply the Content-Signal header declaring agent usage intent. */
 function contentSignal(c: { env: Env }): Record<string, string> {
 	return {
 		"Content-Signal":
@@ -83,15 +85,13 @@ function contentSignal(c: { env: Env }): Record<string, string> {
 	};
 }
 
-// CORS so agents can fetch the machine-readable surfaces from anywhere.
 app.use("/llms.txt", cors());
 app.use("/llms-full.txt", cors());
 app.use("/index.json", cors());
 app.use("/jsonld", cors());
-// NB: Hono's "*" wildcard does not match a literal ".md"/".jsonld" suffix, so
-// the per-page surfaces need the same regex matcher their routes use.
 app.use("/:file{.+\\.md}", cors());
 app.use("/:file{.+\\.jsonld}", cors());
+app.use("/api/area44/*", cors());
 
 // ---------------------------------------------------------------------------
 // Machine-readable surfaces
@@ -148,7 +148,6 @@ app.get("/jsonld", async (c) => {
 	});
 });
 
-// Per-page Markdown: /:slug.md
 app.get("/:file{.+\\.md}", async (c) => {
 	const slug = c.req.param("file").replace(/\.md$/, "");
 	const site = siteConfig(c.env, originOf(c.req.url));
@@ -161,7 +160,6 @@ app.get("/:file{.+\\.md}", async (c) => {
 	});
 });
 
-// Per-page JSON-LD: /:slug.jsonld
 app.get("/:file{.+\\.jsonld}", async (c) => {
 	const slug = c.req.param("file").replace(/\.jsonld$/, "");
 	const site = siteConfig(c.env, originOf(c.req.url));
@@ -183,6 +181,7 @@ app.get("/api/site", async (c) => {
 	return c.json({
 		site,
 		webBotAuthEnabled: c.env.ENABLE_WEB_BOT_AUTH === "true",
+		area44: getArea44Status(),
 		surfaces: [
 			{ id: "llms-txt", label: "llms.txt", path: "/llms.txt", kind: "text" },
 			{
@@ -279,6 +278,73 @@ app.post("/api/refresh", async (c) => {
 	return c.json({
 		ok: true,
 		message: "Cache cleared; surfaces will re-enrich.",
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Area 44 / Inselligence — Zero Trust control plane
+// ---------------------------------------------------------------------------
+
+app.get("/api/area44/status", (c) => {
+	return c.json(getArea44Status());
+});
+
+app.post("/api/area44/verify", async (c) => {
+	const body = await c.req.json<Area44VerifyRequest>().catch(() => null);
+	const result = verifyArea44Identity(c.req.raw, body, c.env.ADMIN_TOKEN);
+	const status = result.verified ? 200 : 401;
+	return c.json(result, status as 200 | 401);
+});
+
+app.post("/api/area44/policy", async (c) => {
+	const body = await c.req
+		.json<{
+			resource?: string;
+			resourceClass?: ResourceClass;
+			action?: "read" | "write" | "execute" | "admin";
+		}>()
+		.catch(() => null);
+
+	if (!body?.resource || !body?.resourceClass || !body?.action) {
+		return c.json(
+			{
+				error: "Missing required fields: resource, resourceClass, action",
+			},
+			400,
+		);
+	}
+
+	const result = evaluateArea44Policy(
+		c.req.raw,
+		body.resource,
+		body.resourceClass,
+		body.action,
+		c.env.ADMIN_TOKEN,
+	);
+
+	const status =
+		result.decision.decision === "allow"
+			? 200
+			: result.decision.decision === "challenge"
+				? 403
+				: 401;
+
+	return c.json(result, status as 200 | 401 | 403);
+});
+
+app.get("/api/area44/audit/sample", (c) => {
+	return c.json({
+		note: "Audit events are generated on every policy decision. Persistence layer pending.",
+		sample: {
+			id: "uuid",
+			timestamp: new Date().toISOString(),
+			subjectId: "ring-or-subject-id",
+			resource: "/example",
+			action: "read",
+			decision: "allow",
+			reason: "Identity and policy checks passed",
+			policyId: "zt-default-allow",
+		},
 	});
 });
 
