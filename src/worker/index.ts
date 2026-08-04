@@ -1,5 +1,5 @@
 /**
- * Agent Visibility Worker + Area 44 Zero Trust + Command Center
+ * Agent Visibility Worker + Area 44 Zero Trust + Command Center + CRM
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -36,6 +36,7 @@ import {
 	verifyAgentIdentity,
 } from "../lib/web-bot-auth";
 import type { ResourceClass } from "../lib/zero-trust";
+import crmRoutes from "./crm-routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -81,6 +82,10 @@ app.use("/:file{.+\\.md}", cors());
 app.use("/:file{.+\\.jsonld}", cors());
 app.use("/api/area44/*", cors());
 app.use("/api/command-center", cors());
+app.use("/api/crm/*", cors());
+
+// Mount native CRM suite
+app.route("/api/crm", crmRoutes);
 
 // ---------------------------------------------------------------------------
 // Machine-readable surfaces
@@ -281,7 +286,7 @@ app.get("/api/command-center", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// Area 44 / Inselligence — Zero Trust control plane + audit persistence
+// Area 44 / Inselligence — Zero Trust + audit
 // ---------------------------------------------------------------------------
 
 app.get("/api/area44/status", async (c) => {
@@ -351,7 +356,7 @@ app.get("/api/area44/audit/:id", async (c) => {
 });
 
 // ---------------------------------------------------------------------------
-// OPTIONAL — Web Bot Auth identity surface (off by default)
+// OPTIONAL — Web Bot Auth
 // ---------------------------------------------------------------------------
 
 app.get("/.well-known/web-bot-auth/directory", (c) => {
