@@ -24,8 +24,11 @@ import {
 } from "../lib/area44";
 import { getCommandCenterSnapshot } from "../lib/command-center";
 import {
+	assertLockedCore,
 	LOCKED_CORE_META,
 	LOCKED_CORE_SHA256,
+	LockedCoreIntegrityError,
+	reportLockedCore,
 	verifyLockedCore,
 } from "../lib/locked-core";
 import {
@@ -47,6 +50,17 @@ import portalRoutes from "./portal-routes";
 const app = new Hono<{ Bindings: Env }>();
 
 app.onError((err, c) => {
+	if (err instanceof LockedCoreIntegrityError) {
+		return c.json(
+			{
+				error: err.message,
+				code: err.code,
+				details: err.details,
+				immutable: true,
+			},
+			409,
+		);
+	}
 	console.error(`[Error] ${c.req.method} ${c.req.path}: ${err.message}`);
 	if (/\.(md|txt)$/.test(c.req.path)) {
 		return c.text("Internal server error", 500);
@@ -274,22 +288,37 @@ app.post("/api/refresh", async (c) => {
 
 app.get("/api/command-center", async (c) => {
 	const snapshot = await getCommandCenterSnapshot(c.env);
-	const locked = await verifyLockedCore();
-	return c.json({ ...snapshot, lockedCore: locked });
+	const lockedCore = await reportLockedCore();
+	return c.json({ ...snapshot, lockedCore });
 });
 
 app.get("/api/area44/status", async (c) => {
-	return c.json(await getArea44Status(c.env));
+	const status = await getArea44Status(c.env);
+	const lockedCore = await reportLockedCore();
+	return c.json({ ...status, lockedCore });
 });
 
-/** Cryptographic verification of immutable core values + doctrine */
+/**
+ * Cryptographic verification of immutable core values + doctrine.
+ * GET /api/area44/locked-core
+ * GET /api/area44/locked-core?strict=1  — throws 409 if hash mismatch
+ */
 app.get("/api/area44/locked-core", async (c) => {
+	const strict =
+		c.req.query("strict") === "1" || c.req.query("strict") === "true";
+
+	if (strict) {
+		const result = await assertLockedCore();
+		return c.json({ ...result, meta: LOCKED_CORE_META, mode: "strict" });
+	}
+
 	const result = await verifyLockedCore();
 	return c.json(
 		{
 			...result,
 			meta: LOCKED_CORE_META,
 			publishedSha256: LOCKED_CORE_SHA256,
+			mode: "report",
 		},
 		result.ok ? 200 : 409,
 	);
