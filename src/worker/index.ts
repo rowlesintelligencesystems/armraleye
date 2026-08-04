@@ -1,5 +1,5 @@
 /**
- * Agent Visibility + Area 44 + Command Center + CRM + Client Portal + Locked Core
+ * Agent Visibility + Area 44 + Command Center + CRM + Portal + Suite + Locked Core
  */
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -46,25 +46,19 @@ import {
 import type { ResourceClass } from "../lib/zero-trust";
 import crmRoutes from "./crm-routes";
 import portalRoutes from "./portal-routes";
+import suiteRoutes from "./suite-routes";
 
 const app = new Hono<{ Bindings: Env }>();
 
 app.onError((err, c) => {
 	if (err instanceof LockedCoreIntegrityError) {
 		return c.json(
-			{
-				error: err.message,
-				code: err.code,
-				details: err.details,
-				immutable: true,
-			},
+			{ error: err.message, code: err.code, details: err.details, immutable: true },
 			409,
 		);
 	}
 	console.error(`[Error] ${c.req.method} ${c.req.path}: ${err.message}`);
-	if (/\.(md|txt)$/.test(c.req.path)) {
-		return c.text("Internal server error", 500);
-	}
+	if (/\.(md|txt)$/.test(c.req.path)) return c.text("Internal server error", 500);
 	return c.json({ error: "Internal server error" }, 500);
 });
 
@@ -104,9 +98,11 @@ app.use("/api/area44/*", cors());
 app.use("/api/command-center", cors());
 app.use("/api/crm/*", cors());
 app.use("/api/portal/*", cors());
+app.use("/api/suite/*", cors());
 
 app.route("/api/crm", crmRoutes);
 app.route("/api/portal", portalRoutes);
+app.route("/api/suite", suiteRoutes);
 
 app.get("/llms.txt", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
@@ -143,10 +139,7 @@ app.get("/robots.txt", async (c) => {
 			contentSignal: contentSignal(c)["Content-Signal"],
 		}),
 		200,
-		{
-			"Content-Type": "text/plain; charset=utf-8",
-			...contentSignal(c),
-		},
+		{ "Content-Type": "text/plain; charset=utf-8", ...contentSignal(c) },
 	);
 });
 
@@ -192,18 +185,8 @@ app.get("/api/site", async (c) => {
 		area44,
 		surfaces: [
 			{ id: "llms-txt", label: "llms.txt", path: "/llms.txt", kind: "text" },
-			{
-				id: "llms-full",
-				label: "llms-full.txt",
-				path: "/llms-full.txt",
-				kind: "text",
-			},
-			{
-				id: "index-json",
-				label: "index.json",
-				path: "/index.json",
-				kind: "json",
-			},
+			{ id: "llms-full", label: "llms-full.txt", path: "/llms-full.txt", kind: "text" },
+			{ id: "index-json", label: "index.json", path: "/index.json", kind: "json" },
 			{ id: "robots", label: "robots.txt", path: "/robots.txt", kind: "text" },
 			{ id: "jsonld", label: "JSON-LD", path: "/jsonld", kind: "json" },
 		],
@@ -230,20 +213,14 @@ app.post("/api/resources", async (c) => {
 	if (!body?.slug || !body?.body) {
 		return c.json({ error: "Missing required fields: slug, body" }, 400);
 	}
-
 	const slug = String(body.slug);
 	if (!SLUG_RE.test(slug)) {
 		return c.json({ error: "Invalid slug: use 1–63 chars of [a-z0-9-]." }, 400);
 	}
-
 	const rawBody = String(body.body);
 	if (new TextEncoder().encode(rawBody).length > MAX_BODY_BYTES) {
-		return c.json(
-			{ error: `Body too large (max ${MAX_BODY_BYTES} bytes).` },
-			400,
-		);
+		return c.json({ error: `Body too large (max ${MAX_BODY_BYTES} bytes).` }, 400);
 	}
-
 	let url = `${originOf(c.req.url)}/${slug}`;
 	if (body.url) {
 		try {
@@ -256,23 +233,18 @@ app.post("/api/resources", async (c) => {
 			return c.json({ error: "url is not a valid URL." }, 400);
 		}
 	}
-
 	const raw: RawResource = {
 		slug,
 		url,
 		title: body.title ? String(body.title).slice(0, 200) : undefined,
 		body: rawBody,
 	};
-
 	try {
 		const enriched = await upsertResource(c.env, raw, MAX_RESOURCES);
 		return c.json(enriched, 201);
 	} catch (err) {
 		if ((err as Error).message === "RESOURCE_LIMIT") {
-			return c.json(
-				{ error: `Resource limit reached (max ${MAX_RESOURCES}).` },
-				409,
-			);
+			return c.json({ error: `Resource limit reached (max ${MAX_RESOURCES}).` }, 409);
 		}
 		throw err;
 	}
@@ -298,28 +270,16 @@ app.get("/api/area44/status", async (c) => {
 	return c.json({ ...status, lockedCore });
 });
 
-/**
- * Cryptographic verification of immutable core values + doctrine.
- * GET /api/area44/locked-core
- * GET /api/area44/locked-core?strict=1  — throws 409 if hash mismatch
- */
 app.get("/api/area44/locked-core", async (c) => {
 	const strict =
 		c.req.query("strict") === "1" || c.req.query("strict") === "true";
-
 	if (strict) {
 		const result = await assertLockedCore();
 		return c.json({ ...result, meta: LOCKED_CORE_META, mode: "strict" });
 	}
-
 	const result = await verifyLockedCore();
 	return c.json(
-		{
-			...result,
-			meta: LOCKED_CORE_META,
-			publishedSha256: LOCKED_CORE_SHA256,
-			mode: "report",
-		},
+		{ ...result, meta: LOCKED_CORE_META, publishedSha256: LOCKED_CORE_SHA256, mode: "report" },
 		result.ok ? 200 : 409,
 	);
 });
@@ -337,20 +297,11 @@ app.post("/api/area44/verify", async (c) => {
 
 app.post("/api/area44/policy", async (c) => {
 	const body = await c.req
-		.json<{
-			resource?: string;
-			resourceClass?: ResourceClass;
-			action?: "read" | "write" | "execute" | "admin";
-		}>()
+		.json<{ resource?: string; resourceClass?: ResourceClass; action?: "read" | "write" | "execute" | "admin" }>()
 		.catch(() => null);
-
 	if (!body?.resource || !body?.resourceClass || !body?.action) {
-		return c.json(
-			{ error: "Missing required fields: resource, resourceClass, action" },
-			400,
-		);
+		return c.json({ error: "Missing required fields: resource, resourceClass, action" }, 400);
 	}
-
 	const result = await evaluateArea44Policy(
 		c.req.raw,
 		body.resource,
@@ -359,14 +310,12 @@ app.post("/api/area44/policy", async (c) => {
 		c.env,
 		c.env.ADMIN_TOKEN,
 	);
-
 	const status =
 		result.decision.decision === "allow"
 			? 200
 			: result.decision.decision === "challenge"
 				? 403
 				: 401;
-
 	return c.json(result, status as 200 | 401 | 403);
 });
 
