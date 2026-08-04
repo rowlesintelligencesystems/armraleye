@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page Builder — ARMR ALEYE</title>
+  <style>
+    :root{--void:#0A0B0F;--panel:#12141A;--gold:#C9A227;--text:#E8E6E3;--muted:#8B909A}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,sans-serif;background:var(--void);color:var(--text);min-height:100vh;display:grid;grid-template-columns:220px 1fr 280px}
+    @media(max-width:900px){body{grid-template-columns:1fr}}
+    aside,.props{background:var(--panel);padding:1rem}
+    h1{font-size:1rem;color:var(--gold);margin-bottom:1rem}
+    h2{font-size:.75rem;text-transform:uppercase;color:var(--muted);margin:1rem 0 .5rem}
+    button{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.55rem .75rem;border-radius:8px;margin-bottom:.35rem;cursor:pointer}
+    button.primary{border-color:var(--gold);color:var(--gold)}
+    main{padding:1rem}
+    #canvas{background:#0d0e12;border-radius:12px;min-height:70vh;padding:1rem;border:1px solid rgba(255,255,255,.06)}
+    .block-preview{border:1px dashed rgba(201,162,39,.3);padding:.75rem;margin-bottom:.5rem;border-radius:8px;font-size:.85rem}
+    .block-preview strong{color:var(--gold)}
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>ARMR Builder</h1>
+    <button class="primary" id="btn-new">New site project</button>
+    <h2>Blocks</h2>
+    <div id="catalog"></div>
+    <h2>Export</h2>
+    <button id="btn-html">Preview HTML</button>
+  </aside>
+  <main>
+    <div id="canvas"><p style="color:#8B909A">Create a project, then add blocks.</p></div>
+    <p id="status" style="font-size:.75rem;color:#8B909A;margin-top:1rem">Website Creation Tool + Page Builder</p>
+  </main>
+  <div class="props">
+    <h1>Page</h1>
+    <p id="page-meta" style="font-size:.85rem;color:#8B909A">No project</p>
+    <h2>Product default</h2>
+    <p style="font-size:.8rem">ARMR Product Engine · Hand of Hamsa™</p>
+  </div>
+  <script>
+    const API = '/api/builder';
+    let project = null;
+    let token = localStorage.getItem('armr_admin_token') || '';
+    async function loadCatalog() {
+      try {
+        const r = await fetch(API + '/catalog');
+        const data = await r.json();
+        const el = document.getElementById('catalog');
+        el.innerHTML = '';
+        (data.blocks || []).forEach(b => {
+          const btn = document.createElement('button');
+          btn.textContent = '+ ' + b.label;
+          btn.onclick = () => addBlock(b.type);
+          el.appendChild(btn);
+        });
+      } catch (e) {
+        document.getElementById('catalog').innerHTML = '<p style="font-size:.8rem;color:#8B909A">Deploy worker for API</p>';
+      }
+    }
+    function renderCanvas() {
+      if (!project) return;
+      const page = project.pages[0];
+      document.getElementById('page-meta').textContent = page.title + ' \u00b7 ' + page.blocks.length + ' blocks';
+      document.getElementById('canvas').innerHTML = page.blocks.map(b =>
+        '<div class="block-preview"><strong>' + b.type + '</strong><br/>' + JSON.stringify(b.props).slice(0,120) + '</div>'
+      ).join('') || '<p style="color:#8B909A">Empty</p>';
+    }
+    async function newProject() {
+      if (!token) { token = prompt('ADMIN_TOKEN') || ''; if (token) localStorage.setItem('armr_admin_token', token); }
+      const r = await fetch(API + '/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ name: 'ARMR ALEYE Site', includeProduct: true })
+      });
+      if (!r.ok) { document.getElementById('status').textContent = 'Create failed'; return; }
+      project = await r.json();
+      renderCanvas();
+    }
+    async function addBlock(type) {
+      if (!project) return alert('Create project first');
+      const r = await fetch(API + '/projects/' + project.id + '/pages/home/blocks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ type })
+      });
+      if (!r.ok) return;
+      project.pages[0].blocks.push(await r.json());
+      renderCanvas();
+    }
+    document.getElementById('btn-new').onclick = newProject;
+    document.getElementById('btn-html').onclick = () => {
+      if (project) window.open(API + '/projects/' + project.id + '/pages/home/html', '_blank');
+    };
+    loadCatalog();
+  </script>
+</body>
+</html>
