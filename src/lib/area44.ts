@@ -5,10 +5,15 @@
  * - Policy decision & enforcement (Zero Trust)
  * - Doctrine Number One monitoring
  * - NFC Ring identity
- * - Audit & lineage
+ * - Audit & lineage (persisted)
  * - Funding / value-capture surface (future)
  */
 
+import {
+	getAuditStats,
+	persistAuditEvent,
+	type AuditStoreEnv,
+} from "./audit-store";
 import {
 	type AuditEvent,
 	type IdentityContext,
@@ -48,14 +53,22 @@ export interface Area44Status {
 		doctrineMonitoring: boolean;
 		policyEngine: boolean;
 		auditLogging: boolean;
+		auditPersistence: boolean;
 		nfcRingSupport: boolean;
+	};
+	audit?: {
+		totalIndexed: number;
+		maxEvents: number;
+		ttlDays: number;
 	};
 	version: string;
 }
 
 /** Return the current status of the Area 44 control plane. */
-export function getArea44Status(): Area44Status {
-	return {
+export async function getArea44Status(
+	env?: AuditStoreEnv,
+): Promise<Area44Status> {
+	const base: Area44Status = {
 		zone: "Area 44",
 		identity: "Inselligence",
 		zeroTrust: true,
@@ -64,22 +77,30 @@ export function getArea44Status(): Area44Status {
 			doctrineMonitoring: true,
 			policyEngine: true,
 			auditLogging: true,
-			nfcRingSupport: true, // interface ready; hardware integration pending
+			auditPersistence: true,
+			nfcRingSupport: true,
 		},
-		version: "0.1.0-zt",
+		version: "0.2.0-zt-audit",
 	};
+
+	if (env) {
+		base.audit = await getAuditStats(env);
+	}
+
+	return base;
 }
 
 /**
  * Verify an identity presentation against Area 44.
  * Accepts NFC Ring headers or body payload.
+ * Persists the resulting audit event.
  */
-export function verifyArea44Identity(
+export async function verifyArea44Identity(
 	req: Request,
 	body: Area44VerifyRequest | null,
+	env: AuditStoreEnv,
 	adminToken?: string,
-): Area44VerifyResponse {
-	// Prefer explicit body values when provided (for testing / future clients)
+): Promise<Area44VerifyResponse> {
 	const headers = new Headers(req.headers);
 	if (body?.ringId) headers.set("x-armr-ring-id", body.ringId);
 	if (body?.doctrineOneStatus === "compliant") {
@@ -100,6 +121,13 @@ export function verifyArea44Identity(
 		{ adminToken },
 	);
 
+	// Persist audit (best-effort; do not fail the request if storage errors)
+	try {
+		await persistAuditEvent(env, audit);
+	} catch (err) {
+		console.error("[Area44] audit persist failed:", (err as Error).message);
+	}
+
 	const verified = result.decision === "allow";
 
 	return {
@@ -115,17 +143,25 @@ export function verifyArea44Identity(
 
 /**
  * Evaluate a policy decision for a given resource through Area 44.
+ * Persists the resulting audit event.
  */
-export function evaluateArea44Policy(
+export async function evaluateArea44Policy(
 	req: Request,
 	resource: string,
 	resourceClass: ResourceClass,
 	action: "read" | "write" | "execute" | "admin",
+	env: AuditStoreEnv,
 	adminToken?: string,
-): Area44PolicyResponse {
+): Promise<Area44PolicyResponse> {
 	const { result, audit } = zeroTrustGate(req, resource, resourceClass, action, {
 		adminToken,
 	});
+
+	try {
+		await persistAuditEvent(env, audit);
+	} catch (err) {
+		console.error("[Area44] audit persist failed:", (err as Error).message);
+	}
 
 	return {
 		resource,
