@@ -1,9 +1,1 @@
-# ARMR Bundles v1.0
-
-| Bundle | SKU | Price |
-|--------|-----|-------|
-| Architecture Ops Pack | ARMR-BND-ARCH-OPS | $149 |
-| Executive Launch Pack | ARMR-BND-EXEC | $79 |
-| Product Intelligence Starter | ARMR-BND-PIE-START | $97 |
-| Full Operator Suite | ARMR-BND-FULL | $249 |
-| Access + Architecture | ARMR-BND-ACCESS | $89 |
+Enterprise bundles: ARCH-OPS $997, EXEC $497, PIE-START $697, FULL $1997, ACCESS $397
