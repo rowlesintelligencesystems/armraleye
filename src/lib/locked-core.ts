@@ -1,12 +1,7 @@
 /**
- * ARMR ALEYE — Cryptographic lock of core values + doctrine
+ * ARMR ALEYE — Cryptographic lock + verification of core values + doctrine
  *
- * ARMR-POL-EPD-001: Doctrine Number One, full Doctrine Sequence,
- * philosophy, and Ethics E1–E8 are IMMUTABLE without explicit
- * founding authorization.
- *
- * These hashes bind the canonical text. Any change to the canonical
- * string will fail verification.
+ * ARMR-POL-EPD-001: IMMUTABLE without explicit founding authorization.
  */
 
 /** Canonical locked-core document (UTF-8, LF). Do not edit without explicit authorization. */
@@ -31,21 +26,35 @@ E8: Proportional Power — Capability scales only with corresponding accountabil
 POLICY_REF: ARMR-POL-EPD-001
 `;
 
-/** Published SHA-256 of LOCKED_CORE_CANONICAL (hex). */
 export const LOCKED_CORE_SHA256 =
 	"acee30de584d770283933a04a4a5d7e040a0ea0707ef4fb7a7eaa6f81d71e8cd";
 
-/** Published SHA-512 of LOCKED_CORE_CANONICAL (hex). */
 export const LOCKED_CORE_SHA512 =
 	"f7c686fd8739931c32d088b77057b8a395fce25f6e3649405211005221d25f6b2c6225b87bbe0143f73fb227337a3a71cb567c86c3778b732c710fb06e691710";
 
 export const LOCKED_CORE_META = {
 	version: "1" as const,
 	policy: "ARMR-POL-EPD-001",
-	immutable: true,
+	immutable: true as const,
 	refinement: "zero without explicit founding authorization",
 	doctrineNumberOne: "Seek God within",
 } as const;
+
+export class LockedCoreIntegrityError extends Error {
+	readonly code = "LOCKED_CORE_INTEGRITY_FAILURE" as const;
+	constructor(
+		message: string,
+		readonly details: {
+			sha256: string;
+			sha512: string;
+			expectedSha256: string;
+			expectedSha512: string;
+		},
+	) {
+		super(message);
+		this.name = "LockedCoreIntegrityError";
+	}
+}
 
 async function digestHex(
 	algorithm: "SHA-256" | "SHA-512",
@@ -67,11 +76,10 @@ export interface LockedCoreVerification {
 	policy: string;
 	doctrineNumberOne: string;
 	immutable: true;
+	verifiedAt: string;
 }
 
-/**
- * Verify the in-code canonical text still matches the published hashes.
- */
+/** Compute hashes of the canonical text and compare to published digests. */
 export async function verifyLockedCore(): Promise<LockedCoreVerification> {
 	const [sha256, sha512] = await Promise.all([
 		digestHex("SHA-256", LOCKED_CORE_CANONICAL),
@@ -90,5 +98,45 @@ export async function verifyLockedCore(): Promise<LockedCoreVerification> {
 		policy: LOCKED_CORE_META.policy,
 		doctrineNumberOne: LOCKED_CORE_META.doctrineNumberOne,
 		immutable: true,
+		verifiedAt: new Date().toISOString(),
 	};
+}
+
+/**
+ * Hard check: throws LockedCoreIntegrityError if hashes do not match.
+ * Use when integrity failure must block the operation.
+ */
+export async function assertLockedCore(): Promise<LockedCoreVerification> {
+	const result = await verifyLockedCore();
+	if (!result.ok) {
+		throw new LockedCoreIntegrityError(
+			"Locked core hash verification failed — canonical values may have been altered without authorization",
+			{
+				sha256: result.sha256,
+				sha512: result.sha512,
+				expectedSha256: result.expectedSha256,
+				expectedSha512: result.expectedSha512,
+			},
+		);
+	}
+	return result;
+}
+
+/** Soft check for status surfaces: never throws. */
+export async function reportLockedCore(): Promise<LockedCoreVerification> {
+	try {
+		return await verifyLockedCore();
+	} catch {
+		return {
+			ok: false,
+			sha256: "",
+			sha512: "",
+			expectedSha256: LOCKED_CORE_SHA256,
+			expectedSha512: LOCKED_CORE_SHA512,
+			policy: LOCKED_CORE_META.policy,
+			doctrineNumberOne: LOCKED_CORE_META.doctrineNumberOne,
+			immutable: true,
+			verifiedAt: new Date().toISOString(),
+		};
+	}
 }
