@@ -5,7 +5,7 @@
  * - Policy decision & enforcement (Zero Trust)
  * - Doctrine Number One monitoring
  * - NFC Ring identity
- * - Audit & lineage (persisted)
+ * - Audit & lineage (persisted + encrypted at rest)
  * - Funding / value-capture surface (future)
  */
 
@@ -54,12 +54,14 @@ export interface Area44Status {
 		policyEngine: boolean;
 		auditLogging: boolean;
 		auditPersistence: boolean;
+		auditEncryption: boolean;
 		nfcRingSupport: boolean;
 	};
 	audit?: {
 		totalIndexed: number;
 		maxEvents: number;
 		ttlDays: number;
+		encryptionEnabled: boolean;
 	};
 	version: string;
 }
@@ -68,6 +70,8 @@ export interface Area44Status {
 export async function getArea44Status(
 	env?: AuditStoreEnv,
 ): Promise<Area44Status> {
+	const encryptionEnabled = Boolean(env?.AUDIT_ENCRYPTION_KEY);
+
 	const base: Area44Status = {
 		zone: "Area 44",
 		identity: "Inselligence",
@@ -78,9 +82,10 @@ export async function getArea44Status(
 			policyEngine: true,
 			auditLogging: true,
 			auditPersistence: true,
+			auditEncryption: encryptionEnabled,
 			nfcRingSupport: true,
 		},
-		version: "0.2.0-zt-audit",
+		version: "0.3.0-zt-audit-enc",
 	};
 
 	if (env) {
@@ -93,7 +98,7 @@ export async function getArea44Status(
 /**
  * Verify an identity presentation against Area 44.
  * Accepts NFC Ring headers or body payload.
- * Persists the resulting audit event.
+ * Persists the resulting audit event (encrypted when key is set).
  */
 export async function verifyArea44Identity(
 	req: Request,
@@ -121,7 +126,6 @@ export async function verifyArea44Identity(
 		{ adminToken },
 	);
 
-	// Persist audit (best-effort; do not fail the request if storage errors)
 	try {
 		await persistAuditEvent(env, audit);
 	} catch (err) {
@@ -143,7 +147,7 @@ export async function verifyArea44Identity(
 
 /**
  * Evaluate a policy decision for a given resource through Area 44.
- * Persists the resulting audit event.
+ * Persists the resulting audit event (encrypted when key is set).
  */
 export async function evaluateArea44Policy(
 	req: Request,
