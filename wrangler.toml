@@ -1,4 +1,7 @@
+# ARMR ALEYE API — pure Worker (no Pages assets)
 name = "armraleyeapi"
 main = "src/index.js"
 compatibility_date = "2024-11-01"
 workers_dev = true
+
+# Do not set assets / site / dist — this is API only

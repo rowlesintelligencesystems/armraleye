@@ -51,7 +51,7 @@ export default {
       const inventory = Array.isArray(body.inventory) ? body.inventory : [];
       const proposals = inventory.slice(0, 25).map((item) => ({
         inventory_anchor: item.title || item.id || "item",
-        proposed_digital_title: `${item.title || "Product"} — Quick-Start & Operator Checklist`,
+        proposed_digital_title: (item.title || "Product") + " — Quick-Start & Operator Checklist",
         bundle_angle: "Free-with-purchase or checkout upsell",
         claims_boundary: "Educational/operational only. No guaranteed outcomes.",
         confidence: "M",
