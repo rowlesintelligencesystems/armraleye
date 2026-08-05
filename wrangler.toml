@@ -1,3 +1,4 @@
 name = "armraleyeapi"
 main = "src/index.js"
 compatibility_date = "2024-11-01"
+workers_dev = true

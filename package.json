@@ -2,10 +2,5 @@
   "name": "armraleyeapi",
   "private": true,
   "version": "1.0.0",
-  "scripts": {
-    "deploy": "wrangler deploy"
-  },
-  "devDependencies": {
-    "wrangler": "^3.99.0"
-  }
+  "description": "ARMR ALEYE API worker"
 }
