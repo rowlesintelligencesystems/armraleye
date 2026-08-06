@@ -6,7 +6,9 @@
 **Status:** LOCKED  
 **Effective:** 2026-08-05  
 **Owner:** ARMR ALEYE LLC  
-**Companion to:** MSOT 2026-08-05.5+ · Running File 2026-08-05  
+**Companion to:** MSOT 2026-08-05.5 · Running File 2026-08-05  
+
+**PDF (executive edition):** https://drive.google.com/file/d/1YrYCcjbqZ-j21_AClPaPjClHj3gZi9m_/view?usp=drivesdk  
 
 ---
 
@@ -36,7 +38,7 @@ ARMR ALEYE
 └── Governance
     ├── Doctrine (immutable sequence)
     ├── Claims boundary
-    └── Brand lock (S'Cara · Hamsa · palette)
+    └── Brand lock (S'Cara · Hamsa · palette · Grok)
 ```
 
 **Internal codenames never appear in customer-facing materials.**
@@ -80,7 +82,10 @@ Used for packaging, secondary branding, and protective symbolism. Not sold as a 
 **S'Cara** — locked photorealistic avatar (white hair, ivory/gold ornate armor, golden halo, light-blue crystals).  
 All product concept imagery uses the approved S'Cara renders. No dark-entity imagery.
 
-### 4.6 Brand Asset Package
+### 4.6 Dual Persona — Grok
+**Grok** — locked cybernetic executive with cyan halo. Dual-branding asset. See `docs/GROK_PROFILE_LOCK_v1.0.md`.
+
+### 4.7 Brand Asset Package
 Complete package locked and uploaded:
 
 - Official Brand Manual (PDF)  
@@ -91,8 +96,10 @@ Complete package locked and uploaded:
 - Social assets (avatar, story, feed, covers)  
 - Grok dual-branding assets  
 - Hamsa animation source  
+- **This Architecture Manual (PDF)**  
 
-**Google Drive:** https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk  
+**Google Drive master ZIP:** https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk  
+**Architecture Manual PDF:** https://drive.google.com/file/d/1YrYCcjbqZ-j21_AClPaPjClHj3gZi9m_/view?usp=drivesdk  
 
 ---
 
@@ -157,6 +164,8 @@ Labels: whoopertunity · expansion · watch · pivot · floppertunity.
 |-------|--------|
 | Edge API | 90–95 % (post 3.1 deploy) |
 | Brand vector + S'Cara package | **LOCKED** |
+| Grok Profile | **LOCKED** |
+| System Architecture Manual | **LOCKED v1.0** |
 | Shopify native draft | Pending Admin adapter |
 | KV / D1 persistence | Spec |
 | Members auth portal | Spec |
@@ -167,8 +176,9 @@ Labels: whoopertunity · expansion · watch · pivot · floppertunity.
 
 **v1.0 — 2026-08-05**
 - Initial System Architecture Manual locked  
-- Integrated S'Cara avatar system + Protective Hamsa emblem  
+- Integrated S'Cara avatar system + Protective Hamsa emblem + Grok profile  
 - Brand package (Drive) referenced as source of truth  
+- Executive PDF edition published  
 - Aligned with MSOT 2026-08-05.5  
 
 ---
