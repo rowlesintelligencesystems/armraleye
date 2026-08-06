@@ -1,6 +1,6 @@
 # ARMR ALEYE — Master Source of Truth (MSOT)
 **Version:** 2026-08-05.5  
-**Updated:** 2026-08-05T21:35:00-05:00  
+**Updated:** 2026-08-05T21:45:00-05:00  
 **Brand spelling (locked):** ARMR ALEYE  
 **Commerce:** https://www.armraleye.com  
 **API:** https://api.armraleye.com  
@@ -38,6 +38,7 @@ ARMR ALEYE
 │   ├── Trend Engine
 │   ├── Content Intelligence Engine (CIE)
 │   ├── Architectural & Integration Intelligence (AIIE)
+│   ├── **Product Ecosystem Intelligence Engine (PEIE)**  ← catalog & relationship layer
 │   └── Packages / manuals / subscriptions
 ├── Access (adjacent): RRMSD · NFC · Zero Trust
 └── Governance: doctrine · claims · brand lock
@@ -106,6 +107,7 @@ Hand-authored SVG preferred for production. Outer auto-trace optional (jump-filt
 | Brand + S'Cara package | **LOCKED** |
 | Grok Profile | **LOCKED** |
 | System Architecture Manual | **LOCKED v1.0** |
+| **Product Ecosystem Intelligence Engine (PEIE)** | **LOCKED v1.0 (definition)** |
 | Shopify native draft | Pending |
 | KV / D1 | Spec |
 
@@ -123,8 +125,9 @@ Worker 3.1 → health `"version":"3.1-trend-ppi"`.
 - S'Cara visual identity + Protective Hamsa emblem fully locked  
 - Complete Brand Package on Google Drive = source of truth  
 - System Architecture Manual ARMR-DIG-SAGM-001 v1.0 locked  
-- **Grok Profile Lock (ARMR-BRAND-GROK-001) added**  
+- Grok Profile Lock (ARMR-BRAND-GROK-001) added  
+- **Product Ecosystem Intelligence Engine (PEIE) locked** — see `docs/ARMR_ENG_PEIE_001_...`  
 - Running File advanced to r4  
-- Repo updated with Architecture Manual + MSOT + Running File + Grok Lock  
+- Repo updated with Architecture Manual + MSOT + Running File + Grok Lock + PEIE  
 
 *End MSOT 2026-08-05.5*
