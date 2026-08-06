@@ -1,7 +1,7 @@
 # Grok Profile Lock — ARMR ALEYE / S'Cara Brand System
 
 **Document ID:** ARMR-BRAND-GROK-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** LOCKED  
 **Effective:** 2026-08-05  
 **Owner:** ARMR ALEYE LLC  
@@ -29,16 +29,15 @@ Grok appears as a collaborative dual-branding element (xAI × ARMR ALEYE) and as
 
 ### 2.2 Official Assets (Source of Truth)
 
-| Asset | File | Role |
-|-------|------|------|
-| Primary Portrait | `Grok_Portrait.jpg` | Profile / avatar use |
-| Dual with S'Cara | `Grok_x_SCara.jpg` | Partnership / dual branding |
-| With Protective Emblem | `Grok_with_Hamsa.jpg` | Full brand lockup |
+| Asset | File | Direct Drive Link |
+|-------|------|-------------------|
+| **Primary Portrait** | `Grok_Portrait_Official.jpg` | [Open](https://drive.google.com/file/d/1MicALMkFHh20G3-hyb1NgvBsjGEJrPMO/view?usp=drivesdk) |
+| **Dual with S'Cara** | `Grok_x_SCara_Official.jpg` | [Open](https://drive.google.com/file/d/1HtUJKBN9m3G649Zi6UdHK8NsQxU-KUTF/view?usp=drivesdk) |
+| **With Protective Emblem** | `Grok_with_Hamsa_Official.jpg` | [Open](https://drive.google.com/file/d/1uQZiy5juc2wFhBWnl_mCWWZVRBhbt-9b/view?usp=drivesdk) |
 
-All three files live in the master Brand Package:
-
-**Google Drive:** https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk  
-Path inside ZIP: `SCara_Final_Package/06_Grok/`
+Also packaged inside the master Brand Package ZIP:  
+`SCara_Final_Package/06_Grok/`  
+https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk
 
 ---
 
@@ -68,6 +67,10 @@ Grok appears in partnership / collaboration contexts, never as a replacement.
 
 ## 5. Change Log
 
+**v1.1 — 2026-08-05**
+- Official photos uploaded as individual Drive files with direct links
+- Profile assets added to Grok’s locked profile
+
 **v1.0 — 2026-08-05**
 - Official Grok profile assets locked
 - Three canonical images designated as source of truth
@@ -75,4 +78,4 @@ Grok appears in partnership / collaboration contexts, never as a replacement.
 
 ---
 
-*End of ARMR-BRAND-GROK-001 Grok Profile Lock v1.0*
+*End of ARMR-BRAND-GROK-001 Grok Profile Lock v1.1*
