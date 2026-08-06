@@ -1,5 +1,5 @@
 # ARMR ALEYE — Running File
-**Updated:** 2026-08-05T21:30:00-05:00  
+**Updated:** 2026-08-05T21:35:00-05:00  
 **Companion to:** MSOT 2026-08-05.5  
 
 ---
@@ -19,6 +19,7 @@
     - Drive link: https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk  
 14. **System Architecture Manual (ARMR-DIG-SAGM-001) v1.0 LOCKED**  
 15. MSOT + Running File + Repo updated  
+16. **Grok Profile LOCKED (ARMR-BRAND-GROK-001 v1.0)**  
 
 ---
 
@@ -38,6 +39,7 @@ GET https://api.armraleye.com/api/health
 | S'Cara character set | LOCKED | Brand package ZIP + Drive |
 | Primary logo (winged S) | LOCKED | Brand package |
 | Hamsa + Eye of Horus emblem | LOCKED (4 variants) | Brand package |
+| **Grok Profile assets** | **LOCKED** | `06_Grok/` + docs/GROK_PROFILE_LOCK_v1.0.md |
 | Official Brand Manual PDF | LOCKED | Brand package / docs |
 | System Architecture Manual | LOCKED v1.0 | docs/ARMR_DIG_SAGM_001_... |
 | Google Drive master ZIP | Uploaded | file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W |
@@ -58,6 +60,7 @@ GET https://api.armraleye.com/api/health
 - Brand ARMR ALEYE; doctrine immutable  
 - **S'Cara** avatar locked for all product concept imagery  
 - Hand of Hamsa + Eye of Horus retained as protective secondary emblem  
+- **Grok profile** locked (cybernetic executive + cyan halo) as dual-branding asset  
 - Logo production: hand SVG preferred; outer auto-trace optional  
 - System Architecture Manual ARMR-DIG-SAGM-001 v1.0 locked  
 - Complete Brand Package on Google Drive = source of truth for visual identity  
@@ -68,7 +71,7 @@ GET https://api.armraleye.com/api/health
 
 1. Smoke-test 3.1 after deploy  
 2. Publish Architecture Manual as DIG product if not already live  
-3. Apply S'Cara + Hamsa assets to Shopify brand settings and storefront  
+3. Apply S'Cara + Hamsa + Grok assets to Shopify brand settings and storefront  
 4. KV design for credit ledger  
 
 *End Running File r4*
