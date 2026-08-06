@@ -1,6 +1,6 @@
 # ARMR ALEYE — Master Source of Truth (MSOT)
 **Version:** 2026-08-05.5  
-**Updated:** 2026-08-05T21:30:00-05:00  
+**Updated:** 2026-08-05T21:35:00-05:00  
 **Brand spelling (locked):** ARMR ALEYE  
 **Commerce:** https://www.armraleye.com  
 **API:** https://api.armraleye.com  
@@ -82,10 +82,11 @@ PIE match scorer and PPI 10-factor formula remain locked as previously recorded.
 - Primary mark: winged golden S + halo  
 - Secondary emblem: **Hand of Hamsa + Eye of Horus** (cyan / gold / hybrid / minimal)  
 - Wizard persona: **S'Cara** — locked photorealistic avatar for all product concepts  
+- **Grok profile:** locked dual-branding asset (cybernetic executive + cyan halo) — see `docs/GROK_PROFILE_LOCK_v1.0.md`  
 
 ### 7.1 Brand Package LOCKED
 
-Complete executive brand package (manuals + social + character + emblems + animation) uploaded to Google Drive:
+Complete executive brand package (manuals + social + character + emblems + animation + Grok) uploaded to Google Drive:
 
 https://drive.google.com/file/d/1yl93pQRLoFcOx7LzQQ8Fy3-f_wcr-J_W/view?usp=drivesdk
 
@@ -103,6 +104,7 @@ Hand-authored SVG preferred for production. Outer auto-trace optional (jump-filt
 |-------|--------|
 | Edge API (after 3.1) | 90–95 % |
 | Brand + S'Cara package | **LOCKED** |
+| Grok Profile | **LOCKED** |
 | System Architecture Manual | **LOCKED v1.0** |
 | Shopify native draft | Pending |
 | KV / D1 | Spec |
@@ -121,7 +123,8 @@ Worker 3.1 → health `"version":"3.1-trend-ppi"`.
 - S'Cara visual identity + Protective Hamsa emblem fully locked  
 - Complete Brand Package on Google Drive = source of truth  
 - System Architecture Manual ARMR-DIG-SAGM-001 v1.0 locked  
+- **Grok Profile Lock (ARMR-BRAND-GROK-001) added**  
 - Running File advanced to r4  
-- Repo updated with Architecture Manual + MSOT + Running File  
+- Repo updated with Architecture Manual + MSOT + Running File + Grok Lock  
 
 *End MSOT 2026-08-05.5*
