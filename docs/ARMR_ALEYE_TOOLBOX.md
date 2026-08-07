@@ -1,7 +1,7 @@
 # ARMR ALEYE — Toolbox
-**Version:** 1.0  
+**Version:** 1.1  
 **Updated:** 2026-08-07  
-**MSOT reference:** 2026-08-07.4  
+**MSOT reference:** 2026-08-07.5  
 **Purpose:** Running inventory of skills, tools, templates, how-tos, quality bars, and scoring systems used to ship ARMR ALEYE work.  
 **Owner rule:** Update this file when a skill is proven in production. Do not invent tools that were never used.
 
@@ -45,6 +45,7 @@
 | SVG production pack use | Hand-authored icon / horizontal / vertical SVGs | Editable strokes, web, print vectors |
 | Isolate → vectorize → plate | Threshold cyan → VTracer spline → composite on navy | Remove JPEG bottom pixelation only when needed |
 | Simplified SVG | Tiny `viewBox 0 0 200 240` minimal mark | Favicon / small chrome |
+| **Grok iterative logo refinement** | Successive Grok Imagine edits: pixel art → HD → 4K → declutter → smooth glow → Eye/node refine → “less is more” minimalist | When a logo needs progressive aesthetic tightening (proven 2026-08-07 on circuit Hamsa) |
 
 ### 2.3 Engineering & API
 
@@ -80,6 +81,7 @@
 | GitHub (connected) | Push `docs/` to `rowlesintelligencesystems/armraleye` |
 | Cloudflare Worker host | `api.armraleye.com` |
 | Shopify storefront | `www.armraleye.com` commerce |
+| Grok Imagine (edit / generate) | Iterative logo / avatar refinement |
 
 ### 3.2 Optional / external
 
@@ -202,6 +204,7 @@ canvas.paste(mark, (x, y), mark if mark.mode == "RGBA" else None)
 3. Need editable strokes → `logo_icon.svg` / horizontal / vertical from production pack.  
 4. JPEG noise at edges → isolate cyan → VTracer → plate (once).  
 5. Never promote `docs/graphics/*schneider*` or poster experiments to masters.
+6. New minimal soft-neon variant available as candidate secondary.
 
 ### 5.3 Logo SVG quick reference
 
@@ -230,6 +233,15 @@ Stroke/fill brand cyan: `#00E5FF`. Plate: `#0A0F1A`.
 3. Human claims rewrite.  
 4. Push with `confirm_push: true` only.  
 5. Verify destination; treat `not_configured` as correct failure.
+
+### 5.6 Grok iterative logo refinement (proven)
+
+1. Start from user feedback on current mark (e.g., “unacceptable pixelation”).  
+2. Generate clean intentional base (pixel or vector-style).  
+3. Iterate in small steps: resolution → detail → declutter → glow smoothness → focal element (Eye) → node balance → “less is more”.  
+4. Stop when user signals approval.  
+5. Save final raster, document in MSOT as candidate or master, dual-push.  
+6. Apply human selection/arrangement for any copyright claim on the compilation.
 
 ---
 
@@ -305,6 +317,7 @@ Educational use only — no guaranteed returns language.
 - Approved master used on navy without forced transparency  
 - SVG from production pack with documented viewBox and stroke widths  
 - Isolated vector only when removing real raster noise  
+- Iterative Grok refinement that ends with user “gorgeous” approval and “less is more” discipline  
 
 **Process**
 - One brief → one deliverable  
@@ -325,6 +338,7 @@ Educational use only — no guaranteed returns language.
 - Spending hours on alpha extraction for a navy UI  
 - Shipping Schneider-fit scribbles or vertical jump artifacts  
 - Promoting lab `docs/graphics/*` files as brand masters  
+- Over-cluttered node lines that ignore “less is more”  
 
 **Process**
 - Rebuilding the same thin PDF repeatedly  
@@ -351,6 +365,7 @@ Educational use only — no guaranteed returns language.
 | Background | Solid navy plate | Noisy JPEG bottom |
 | Vector | Prod pack or clean isolate | Spike/jump paths |
 | Time | Minutes to composite | Multi-hour re-extract loops |
+| Iteration | Progressive declutter + soft glow + Eye refine | Over-cluttered nodes |
 
 ---
 
@@ -378,8 +393,13 @@ Toolbox methods must still obey doctrine:
 
 ## 10. Version log
 
+**1.1 — 2026-08-07**
+- Added **Grok iterative logo refinement** skill (proven on circuit Hamsa session)  
+- Added how-to 5.6 and quality notes for progressive “less is more” logo work  
+- Aligned to MSOT 2026-08-07.5  
+
 **1.0 — 2026-08-07**
 - Initial Toolbox: skills, tools, templates, how-tos, PIE/PPI scoring, commercial scale, excellent vs poor examples  
 - Aligned to MSOT 2026-08-07.4 and content-first manual rule  
 
-*End Toolbox v1.0*
+*End Toolbox v1.1*
