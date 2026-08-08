@@ -21,12 +21,7 @@ const CATALOG=[
 {sku:"ARMR-SUB-STACK",title:"Engine Stack",price_monthly:399,type:"subscription"},
 {sku:"ARMR-SUB-MEMBERS",title:"Members Library",price_monthly:29,type:"subscription"},
 ];
-const JOB_WORDS=/\b(quick-?start|checklist|field guide|workbook|one-?pager|agenda|setup|care|operator|implementation|onboarding)\b/i;
-const TYPE_WORDS=/\b(checklist|guide|workbook|one-?pager|manual|sop|agenda|playbook)\b/i;
-const CLAIMS_BAD=/\b(guaranteed?|guarantee|cure|heal|miracle|rank #1|guaranteed sales|get rich)\b/i;
-const GENERIC_ANCHOR=/^(product|item|test|sample|untitled|sku)\b/i;
 const auditBuffer=[];
-const signalBuffer=[];
 
 function json(data,status=200){return new Response(JSON.stringify(data,null,2),{status,headers:{"content-type":"application/json; charset=utf-8","access-control-allow-origin":"*","x-armr-brand":BRAND}});}
 function cors(){return new Response(null,{headers:{"access-control-allow-origin":"*","access-control-allow-methods":"GET,POST,OPTIONS","access-control-allow-headers":"content-type,authorization,x-armr-scope"}});}
@@ -39,15 +34,14 @@ function n01(v,def=0.5){if(v==null||v==="")return def;const x=Number(v);if(Numbe
 function detectPlatform({url="",platform_hint="",html_snippet=""}={}){
 const u=String(url||"").trim(),hint=String(platform_hint||"").toLowerCase().trim(),html=String(html_snippet||"");
 if(hint){const rule=PLATFORM_RULES.find(r=>r.id===hint)||PLATFORM_RULES.find(r=>r.label.toLowerCase()===hint);
-if(rule)return{ok:true,source:"user_hint",detected:{id:rule.id,label:rule.label,confidence:"H"},scan_options:rule.scan_options,push_options:rule.push_options,next_prompt:"Would you like me to scan your website for product matching?");}
+if(rule)return{ok:true,source:"user_hint",detected:{id:rule.id,label:rule.label,confidence:"H"},scan_options:rule.scan_options,push_options:rule.push_options,next_prompt:"Would you like me to scan your website for product matching?"};}
 for(const rule of PLATFORM_RULES){if(rule.id==="generic_website")continue;
 if(rule.urlRe.some(re=>re.test(u))||rule.bodyRe.some(re=>re.test(html)))
-return{ok:true,source:"url",detected:{id:rule.id,label:rule.label,confidence:rule.confidence},input_url:u||null,scan_options:rule.scan_options,push_options:rule.push_options,next_prompt:"Would you like me to scan your website for product matching?");}
-if(/^https?:\/\//i.test(u))return{ok:true,source:"url",detected:{id:"generic_website",label:"Website",confidence:"L"},input_url:u,scan_options:["public_url"],push_options:["website_webhook","social_webhook","csv_download"],next_prompt:"Would you like me to scan your website for product matching?");
+return{ok:true,source:"url",detected:{id:rule.id,label:rule.label,confidence:rule.confidence},input_url:u||null,scan_options:rule.scan_options,push_options:rule.push_options,next_prompt:"Would you like me to scan your website for product matching?"};}
+if(/^https?:\/\//i.test(u))return{ok:true,source:"url",detected:{id:"generic_website",label:"Website",confidence:"L"},input_url:u,scan_options:["public_url"],push_options:["website_webhook","social_webhook","csv_download"],next_prompt:"Would you like me to scan your website for product matching?"};
 return{ok:true,source:"none",detected:null,prompt:"Where do you sell?",choices:[{id:"shopify",label:"Shopify"},{id:"website",label:"Website only"},{id:"etsy",label:"Etsy"},{id:"other",label:"Other / not sure"}]};
 }
 
-/* FULL SOURCE on Drive worker-3.1-trend-ppi.js — this GitHub file must be the complete export default handler */
 export default{async fetch(request,env){
 const url=new URL(request.url);
 let path=url.pathname.replace(/\/$/,"")||"/";
