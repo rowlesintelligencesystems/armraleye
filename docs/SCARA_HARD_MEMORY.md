@@ -7,6 +7,10 @@
 3. Prefer delete Worker → create new → Connect to Git.
 4. Do not re-ask settled facts. Read this file first.
 
+## Canonical Worker name (LOCKED)
+**ONLY:** `armraleyeapi-3-1`
+Forbidden for this API ship: armraleye-api, armraleyeapi, armraleye
+
 ## Boot contract (LOCKED)
 Before any founder-facing Worker/Shopify/deploy/phone instruction:
 1. Read this file.
@@ -19,6 +23,7 @@ GET /api/memory/hard — JSON constraints stub in Worker 3.1 package.
 ## Live
 - API: https://api.armraleye.com
 - Commerce: https://www.armraleye.com
-- Worker target: 3.1-trend-ppi
+- Worker target version: 3.1-trend-ppi
+- Worker name: armraleyeapi-3-1
 
 *Full Hard Memory on Google Drive is canonical.*
