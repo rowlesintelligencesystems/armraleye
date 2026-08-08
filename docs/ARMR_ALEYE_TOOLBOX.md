@@ -1,30 +1,18 @@
-# ARMR ALEYE — Toolbox
-**Version:** 1.3  
-**Updated:** 2026-08-07  
-**MSOT reference:** 2026-08-07.8  
-**Purpose:** Running inventory of skills, tools, templates, how-tos, quality bars, and scoring systems used to ship ARMR ALEYE work.  
-**Owner rule:** Update this file when a skill is proven in production. Do not invent tools that were never used.
+# ARMR ALEYE TOOLBOX
+**Version:** 1.5  
+**Date:** 2026-08-07T20:55:00-04:00  
+**MSOT reference:** 2026-08-07.11  
 
-> **Canonical note:** Full Toolbox body (all skills 2.1–2.4, templates 4.x, how-tos 5.1–5.9, scoring, quality examples) is on **Google Drive**. GitHub holds version + COLLECT skill tip when size-limited.
+> Drive holds full Toolbox. GitHub may be tip.
 
-### COLLECT → UPDATE cycle (skill)
-
-Scan Drive baseline → collect locks/status/skills only → bump MSOT/Running/(Toolbox if needed) → dual-push Drive+GitHub → verify sizes → handoff line.
-
-### How-to 5.9 COLLECT → UPDATE EVERYTHING
-
-1. SCAN Drive for newest MSOT / Running File / Toolbox; record versions and byte sizes.  
-2. COLLECT only locks, architecture, status, proven skills, ordered next actions.  
-3. UPDATE: bump MSOT minor; bump Running revision; bump Toolbox only if new proven skill shipped.  
-4. Dual-push full text to Google Drive (canonical) and GitHub `docs/`.  
-5. VERIFY Drive non-empty, GitHub non-zero, Running points at new MSOT.  
-6. Handoff: MSOT | Running | Toolbox | Drive/GitHub flags | Next 3 | Links.
+## Proven this cycle
+- **cloudflare-workers skill v1.1** — phone Git deploy, preflight, name=`armraleyeapi-3-1`, Hono mis-entry map
+- **Boot Hard Memory** — read before founder-facing deploy instructions
+- **COLLECT → UPDATE** Master cycle
+- **Preflight before Retry Deploy** — package-lock, node --check, name match, no hono on entry
 
 ## Version log
+**1.5 — 2026-08-07** cloudflare-workers skill; Worker name lock; MSOT 07.11
+**1.4 — 2026-08-07** Boot Hard Memory + /api/memory/hard
 
-**1.3 — 2026-08-07** — COLLECT→UPDATE skill + how-to 5.9; MSOT ref 2026-08-07.8  
-**1.2 — 2026-08-07** — Dynasty skills, Termux, gate unlock  
-**1.1 — 2026-08-07** — Grok iterative logo refinement  
-**1.0 — 2026-08-07** — Initial Toolbox  
-
-*End Toolbox v1.3 — full text on Google Drive*
+*Full Toolbox on Google Drive*
