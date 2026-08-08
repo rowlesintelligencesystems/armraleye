@@ -1,4 +1,4 @@
-name = "armraleye-api"
+name = "armraleyeapi-3-1"
 main = "worker.js"
 compatibility_date = "2024-09-23"
 workers_dev = true
