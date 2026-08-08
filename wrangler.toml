@@ -1,3 +1,4 @@
-name = "armraleyeapi"
-compatibility_date = "2024-01-01"
-main = "./src/index.js"
+name = "armraleyeapi-3-1"
+main = "./worker-deploy/cf-phone-ship/worker.js"
+compatibility_date = "2024-09-23"
+workers_dev = true

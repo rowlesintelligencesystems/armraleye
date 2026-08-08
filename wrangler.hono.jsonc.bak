@@ -1,0 +1,6 @@
+{
+  "_comment": "Backup of full Hono+assets worker config. Restored when full suite deploy is needed.",
+  "name": "armraleye",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2025-10-08"
+}
